@@ -170,7 +170,7 @@ export default function AdminOverview() {
                 <Tooltip 
                   contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
                   itemStyle={{ color: '#111', fontWeight: 'bold' }}
-                  formatter={(value: number) => [`$${value.toLocaleString('en-US', { minimumFractionDigits: 2 })}`, 'Revenue']}
+                  formatter={(value: any) => [`$${Number(value).toLocaleString('en-US', { minimumFractionDigits: 2 })}`, 'Revenue']}
                 />
                 <Area type="monotone" dataKey="revenue" stroke="#FF9900" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
               </AreaChart>
