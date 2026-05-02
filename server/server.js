@@ -37,10 +37,13 @@ app.get('/api/health', (req, res) => {
 app.use(errorHandler);
 
 // Start server (no MongoDB - using Prisma/PostgreSQL)
-const PORT = process.env.PORT || 5000;
+if (process.env.NODE_ENV !== 'production' && process.env.VERCEL !== '1') {
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+        console.log(`🚀 SaaS Hub API running on http://localhost:${PORT}`);
+        console.log(`📦 API endpoints at http://localhost:${PORT}/api`);
+        console.log(`🗄️  Database: PostgreSQL via Prisma`);
+    });
+}
 
-app.listen(PORT, () => {
-    console.log(`🚀 SaaS Hub API running on http://localhost:${PORT}`);
-    console.log(`📦 API endpoints at http://localhost:${PORT}/api`);
-    console.log(`🗄️  Database: PostgreSQL via Prisma`);
-});
+module.exports = app;
