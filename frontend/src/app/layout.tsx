@@ -12,6 +12,10 @@ const inter = Inter({
 
 export const viewport: Viewport = {
   themeColor: "#FF9900",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export const metadata: Metadata = {
@@ -20,6 +24,11 @@ export const metadata: Metadata = {
     "Discover millions of products at unbeatable prices. Fast delivery, easy returns, and a shopping experience built for the modern age.",
   keywords: "ecommerce, online shopping, deals, electronics, fashion, home",
   authors: [{ name: "ShopEx" }],
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "ShopEx",
+  },
   openGraph: {
     title: "ShopEx — Shop Smart, Live Better",
     description:

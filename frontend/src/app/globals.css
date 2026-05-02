@@ -64,6 +64,7 @@
 
 *, *::before, *::after {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 :root {
@@ -129,6 +130,10 @@ h1, h2, h3, h4, h5, h6 {
 /* ============================================
    UTILITY CLASSES
    ============================================ */
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
 
 /* Skeleton shimmer loader */
 @keyframes shimmer {
