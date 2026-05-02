@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
@@ -55,7 +55,7 @@ const CATEGORIES = [
   "Audio & Headphones",
 ];
 
-export default function ProductsPage() {
+function ProductsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -525,5 +525,13 @@ export default function ProductsPage() {
       <MobileNav />
       <div className="h-16 md:hidden" />
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#F7F7F7]"><Loader2 className="w-8 h-8 animate-spin text-[#FF9900]" /></div>}>
+      <ProductsContent />
+    </Suspense>
   );
 }
