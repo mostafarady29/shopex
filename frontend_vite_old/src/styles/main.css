@@ -1,0 +1,250 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+/* ===================================
+   E-Commerce Website - Main Styles
+   Aesthetic: Bento Grid / Monospace / Data-Heavy
+   =================================== */
+
+:root {
+  /* Colors */
+  --bg-primary: #0F1115;
+  --bg-secondary: #16181D;
+  --bg-tertiary: #1F2229;
+
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+
+  /* Accents */
+  --accent-color: #3B82F6;
+  --accent-hover: #2563EB;
+  --accent-secondary: #10B981;
+
+  --border-color: #334155;
+  --border-hover: #475569;
+
+  /* Typography */
+  --font-display: 'Fira Code', monospace;
+  --font-body: 'Fira Sans', sans-serif;
+
+  /* Spacing Rhythms */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 4rem;
+  --space-6: 8rem;
+
+  --border-width: 1px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+}
+
+[data-theme="light"] {
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #F1F5F9;
+
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+
+  --accent-color: #2563EB;
+  --accent-hover: #1D4ED8;
+  --accent-secondary: #059669;
+
+  --border-color: #E2E8F0;
+  --border-hover: #CBD5E1;
+}
+
+/* ===================================
+   Base Layer — resets & global styles
+   =================================== */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.5;
+    letter-spacing: 0;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: var(--space-3);
+    color: var(--text-primary);
+  }
+
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    letter-spacing: -0.05em;
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    letter-spacing: -0.03em;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+
+  h4 {
+    text-transform: uppercase;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 200ms ease;
+  }
+
+  ul {
+    list-style: none;
+  }
+}
+
+/* ===================================
+   Structural helpers
+   =================================== */
+.container-custom {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+.section {
+  padding: var(--space-5) 0;
+}
+
+/* Bento Grid */
+.bento-grid {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(12, 1fr);
+}
+
+.bento-col-12 { grid-column: span 12; }
+.bento-col-8  { grid-column: span 12; }
+.bento-col-6  { grid-column: span 12; }
+.bento-col-4  { grid-column: span 12; }
+.bento-col-3  { grid-column: span 12; }
+
+@media (min-width: 768px) {
+  .bento-col-8 { grid-column: span 8; }
+  .bento-col-6 { grid-column: span 6; }
+  .bento-col-4 { grid-column: span 4; }
+  .bento-col-3 { grid-column: span 3; }
+}
+
+/* Legacy utility shims (keep for components not yet migrated) */
+.d-flex        { display: flex; }
+.align-center  { align-items: center; }
+.justify-between { justify-content: space-between; }
+.text-center   { text-align: center; }
+.text-accent   { color: var(--accent-color); }
+.text-muted    { color: var(--text-muted); }
+.mt-4          { margin-top: var(--space-4); }
+.mb-4          { margin-bottom: var(--space-4); }
+.mb-5          { margin-bottom: var(--space-5); }
+.gap-2         { gap: var(--space-2); }
+.gap-3         { gap: var(--space-3); }
+.no-list       { list-style: none; padding: 0; }
+
+/* Animation Staggers */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-stagger > * {
+  opacity: 0;
+  animation: slideUp 400ms ease forwards;
+}
+
+.animate-stagger > *:nth-child(1) { animation-delay: 50ms; }
+.animate-stagger > *:nth-child(2) { animation-delay: 100ms; }
+.animate-stagger > *:nth-child(3) { animation-delay: 150ms; }
+.animate-stagger > *:nth-child(4) { animation-delay: 200ms; }
+.animate-stagger > *:nth-child(5) { animation-delay: 250ms; }
+.animate-stagger > *:nth-child(6) { animation-delay: 300ms; }
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(59,130,246,0.3); }
+  50% { box-shadow: 0 0 0 8px rgba(59,130,246,0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 400ms ease forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* Gradient text - standard CSS version */
+.gradient-text {
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-color) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Hide scrollbar */
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Additional responsive utility */
+.radius-sm { border-radius: var(--radius-sm, 8px); }
+.radius-md { border-radius: var(--radius-md); }
+.radius-lg { border-radius: var(--radius-lg); }
+
+/* Smooth page transitions */
+main {
+  animation: fadeIn 200ms ease;
+}
+

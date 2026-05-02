@@ -1,0 +1,150 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 String     @id @default(uuid())
+  firstName          String
+  lastName           String
+  email              String     @unique
+  password           String
+  phone              String?
+  role               String     @default("customer") 
+  
+  street             String?
+  city               String?
+  postalCode         String?
+  country            String?
+
+  resetPasswordToken String?
+  resetPasswordExpire DateTime?
+
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+
+  orders             Order[]
+  reviews            Review[]
+  affiliate          Affiliate?
+}
+
+model Affiliate {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id])
+  referralCode     String   @unique
+  commissionRate   Float    @default(10.0)
+  status           String   @default("pending") // pending / active / rejected
+  
+  wallet           Wallet?
+  referrals        Referral[]
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Product {
+  id           String      @id @default(uuid())
+  name         String
+  description  String
+  category     String
+  brand        String?
+  price        Float
+  comparePrice Float?
+  sku          String?     @unique
+  stock        Int         @default(0)
+  images       String[]    
+  status       String      @default("active")
+  featured     Boolean     @default(false)
+  rating       Float       @default(0)
+  reviewCount  Int         @default(0)
+  commissionRate Float?
+
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  orderItems   OrderItem[]
+  reviews      Review[]
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  orderId         String      @unique
+  userId          String
+  user            User        @relation(fields: [userId], references: [id])
+  
+  items           OrderItem[]
+
+  shipFirstName   String
+  shipLastName    String
+  shipEmail       String
+  shipPhone       String
+  shipStreet      String
+  shipCity        String
+  shipPostalCode  String
+  shipCountry     String
+
+  paymentMethod   String
+  subtotal        Float
+  shipping        Float       @default(0)
+  tax             Float       @default(0)
+  total           Float
+  status          String      @default("pending")
+  deliveryDate    DateTime?
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  referral        Referral?
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  name      String
+  quantity  Int
+  price     Float
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  rating    Int
+  comment   String
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Referral {
+  id               String   @id @default(uuid())
+  affiliateId      String
+  affiliate        Affiliate @relation(fields: [affiliateId], references: [id])
+  orderId          String   @unique
+  order            Order    @relation(fields: [orderId], references: [id])
+  commissionAmount Float
+  status           String   @default("pending") // pending / available / paid
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Wallet {
+  id               String   @id @default(uuid())
+  affiliateId      String   @unique
+  affiliate        Affiliate @relation(fields: [affiliateId], references: [id])
+  balance          Float    @default(0)
+  pendingBalance   Float    @default(0)
+  
+  updatedAt        DateTime @updatedAt
+}

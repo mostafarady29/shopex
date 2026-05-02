@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Checkout - SaaS Hub">
+    <title>Checkout - SaaS Hub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+
+    <style>
+        .checkout-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .checkout-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 0;
+        }
+
+        .progress-line-checkout {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            height: 2px;
+            background: var(--primary-gradient);
+            transition: width 0.3s ease;
+            z-index: 1;
+        }
+
+        .checkout-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+
+        .step-circle-checkout {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .checkout-step.active .step-circle-checkout {
+            background: var(--primary-gradient);
+            border-color: transparent;
+            color: white;
+        }
+
+        .checkout-step.completed .step-circle-checkout {
+            background: var(--success-color);
+            border-color: transparent;
+            color: white;
+        }
+
+        .step-label-checkout {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .checkout-step.active .step-label-checkout {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .checkout-section {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            margin-bottom: 1rem;
+        }
+
+        .payment-method:hover,
+        .payment-method.active {
+            border-color: var(--primary-color);
+            background: rgba(0, 153, 204, 0.05);
+        }
+
+        .payment-method input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary-color);
+        }
+
+        .payment-icon {
+            width: 50px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="bi bi-hexagon-fill"></i> SaaS Hub
+            </a>
+
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn-icon" id="darkModeToggle">
+                    <i class="bi bi-moon-fill"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div
+        style="background: var(--primary-gradient); padding: 2rem 0; color: white; position: relative; overflow: hidden;">
+        <img src="../assets/images/hero_checkout.png" alt=""
+            style="position: absolute; right: -20px; top: -20px; width: 250px; opacity: 0.15; pointer-events: none;">
+        <div class="container">
+            <h1 style="font-size: 2rem; margin: 0;">Secure Checkout</h1>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container" style="padding: 3rem 0;">
+        <!-- Checkout Steps -->
+        <div class="checkout-steps">
+            <div class="progress-line-checkout" id="progressLineCheckout" style="width: 0%"></div>
+            <div class="checkout-step active" data-step="1">
+                <div class="step-circle-checkout">1</div>
+                <span class="step-label-checkout">Shipping</span>
+            </div>
+            <div class="checkout-step" data-step="2">
+                <div class="step-circle-checkout">2</div>
+                <span class="step-label-checkout">Payment</span>
+            </div>
+            <div class="checkout-step" data-step="3">
+                <div class="step-circle-checkout">3</div>
+                <span class="step-label-checkout">Review</span>
+            </div>
+        </div>
+
+        <form id="checkoutForm" onsubmit="handleCheckout(event)">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Step 1: Shipping Information -->
+                    <div class="checkout-section step-content" data-step="1">
+                        <h3 style="margin-bottom: 1.5rem;"><i class="bi bi-truck"></i> Shipping Information</h3>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">First Name *</label>
+                                <input type="text" class="form-control" name="firstName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Last Name *</label>
+                                <input type="text" class="form-control" name="lastName" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Email Address *</label>
+                                <input type="email" class="form-control" name="email" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Phone Number *</label>
+                                <input type="tel" class="form-control" name="phone" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Street Address *</label>
+                                <input type="text" class="form-control" name="address" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">City *</label>
+                                <input type="text" class="form-control" name="city" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Postal Code *</label>
+                                <input type="text" class="form-control" name="postalCode" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Country *</label>
+                                <select class="form-control" name="country" required>
+                                    <option value="">Select Country</option>
+                                    <option value="US">United States</option>
+                                    <option value="UK">United Kingdom</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="SA">Saudi Arabia</option>
+                                    <option value="AE">UAE</option>
+                                    <option value="EG">Egypt</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Payment Method -->
+                    <div class="checkout-section step-content" data-step="2" style="display: none;">
+                        <h3 style="margin-bottom: 1.5rem;"><i class="bi bi-credit-card"></i> Payment Method</h3>
+
+                        <div class="payment-method active">
+                            <input type="radio" name="paymentMethod" value="card" checked>
+                            <div class="payment-icon">
+                                <i class="bi bi-credit-card-fill" style="color: var(--primary-color);"></i>
+                            </div>
+                            <div>
+                                <h6 style="margin: 0; color: var(--text-primary);">Credit/Debit Card</h6>
+                                <small style="color: var(--text-muted);">Visa, Mastercard, Amex</small>
+                            </div>
+                        </div>
+
+                        <div class="payment-method">
+                            <input type="radio" name="paymentMethod" value="paypal">
+                            <div class="payment-icon">
+                                <i class="bi bi-paypal" style="color: #0070ba;"></i>
+                            </div>
+                            <div>
+                                <h6 style="margin: 0; color: var(--text-primary);">PayPal</h6>
+                                <small style="color: var(--text-muted);">Pay with your PayPal account</small>
+                            </div>
+                        </div>
+
+                        <div class="payment-method">
+                            <input type="radio" name="paymentMethod" value="cod">
+                            <div class="payment-icon">
+                                <i class="bi bi-cash-coin" style="color: var(--success-color);"></i>
+                            </div>
+                            <div>
+                                <h6 style="margin: 0; color: var(--text-primary);">Cash on Delivery</h6>
+                                <small style="color: var(--text-muted);">Pay when you receive</small>
+                            </div>
+                        </div>
+
+                        <div id="cardDetails" style="margin-top: 2rem;">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label">Card Number</label>
+                                    <input type="text" class="form-control" placeholder="1234 5678 9012 3456"
+                                        maxlength="19">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Expiry Date</label>
+                                    <input type="text" class="form-control" placeholder="MM/YY" maxlength="5">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">CVV</label>
+                                    <input type="text" class="form-control" placeholder="123" maxlength="3">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Review Order -->
+                    <div class="checkout-section step-content" data-step="3" style="display: none;">
+                        <h3 style="margin-bottom: 1.5rem;"><i class="bi bi-check-circle"></i> Review Your Order</h3>
+
+                        <div
+                            style="background: var(--bg-secondary); padding: 1.5rem; border-radius: var(--radius-md); margin-bottom: 1.5rem;">
+                            <h6 style="color: var(--text-primary); margin-bottom: 1rem;">Shipping Address</h6>
+                            <p id="reviewAddress" style="color: var(--text-secondary); margin: 0; line-height: 1.8;">
+                            </p>
+                        </div>
+
+                        <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: var(--radius-md);">
+                            <h6 style="color: var(--text-primary); margin-bottom: 1rem;">Payment Method</h6>
+                            <p id="reviewPayment" style="color: var(--text-secondary); margin: 0;"></p>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <button type="button" class="btn-custom btn-secondary" id="prevBtn"
+                            onclick="changeCheckoutStep(-1)" style="display: none;">
+                            <i class="bi bi-arrow-left"></i> Previous
+                        </button>
+                        <button type="button" class="btn-custom btn-primary" id="nextBtn"
+                            onclick="changeCheckoutStep(1)" style="flex: 1;">
+                            Next <i class="bi bi-arrow-right"></i>
+                        </button>
+                        <button type="submit" class="btn-custom btn-primary" id="submitBtn"
+                            style="flex: 1; display: none;">
+                            <i class="bi bi-check-lg"></i> Place Order
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="col-lg-4">
+                    <div class="checkout-section" style="position: sticky; top: 100px;">
+                        <h3 style="margin-bottom: 1.5rem;">Order Summary</h3>
+
+                        <div id="orderItems" style="margin-bottom: 1.5rem;">
+                            <!-- Order items will be loaded here -->
+                        </div>
+
+                        <hr style="border-color: var(--border-color); margin: 1.5rem 0;">
+
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                            <span style="color: var(--text-secondary);">Subtotal:</span>
+                            <span id="summarySubtotal"
+                                style="font-weight: 600; color: var(--text-primary);">$0.00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                            <span style="color: var(--text-secondary);">Shipping:</span>
+                            <span id="summaryShipping"
+                                style="font-weight: 600; color: var(--text-primary);">$0.00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                            <span style="color: var(--text-secondary);">Tax:</span>
+                            <span id="summaryTax" style="font-weight: 600; color: var(--text-primary);">$0.00</span>
+                        </div>
+
+                        <hr style="border-color: var(--border-color); margin: 1.5rem 0;">
+
+                        <div style="margin-bottom: 1.5rem;">
+                            <label class="form-label" style="font-size: 0.875rem;">Referral Code</label>
+                            <div class="d-flex gap-2">
+                                <input type="text" class="form-control" name="referralCode" placeholder="Enter code">
+                                <button type="button" class="btn-custom btn-outline-primary btn-sm"
+                                    onclick="alert('Code applied!')">Apply</button>
+                            </div>
+                        </div>
+
+                        <hr style="border-color: var(--border-color); margin: 1.5rem 0;">
+
+                        <div style="display: flex; justify-content: space-between;">
+                            <span
+                                style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary);">Total:</span>
+                            <span id="summaryTotal"
+                                style="font-size: 1.5rem; font-weight: 700; color: var(--primary-color);">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: var(--bg-tertiary); padding: 3rem 0; margin-top: 4rem;">
+        <div class="container">
+            <div class="text-center">
+                <p style="color: var(--text-muted); font-size: 0.875rem; margin: 0;">
+                    © 2026 SaaS Hub. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+
+    <script>
+        let currentCheckoutStep = 1;
+        const totalCheckoutSteps = 3;
+
+        function updateCheckoutStepDisplay() {
+            // Update step content
+            document.querySelectorAll('.step-content').forEach(step => {
+                step.style.display = 'none';
+            });
+            document.querySelector(`.step-content[data-step="${currentCheckoutStep}"]`).style.display = 'block';
+
+            // Update progress steps
+            document.querySelectorAll('.checkout-step').forEach((step, index) => {
+                const stepNum = index + 1;
+                step.classList.remove('active', 'completed');
+
+                if (stepNum < currentCheckoutStep) {
+                    step.classList.add('completed');
+                    step.querySelector('.step-circle-checkout').innerHTML = '<i class="bi bi-check-lg"></i>';
+                } else if (stepNum === currentCheckoutStep) {
+                    step.classList.add('active');
+                    step.querySelector('.step-circle-checkout').textContent = stepNum;
+                } else {
+                    step.querySelector('.step-circle-checkout').textContent = stepNum;
+                }
+            });
+
+            // Update progress line
+            const progress = ((currentCheckoutStep - 1) / (totalCheckoutSteps - 1)) * 100;
+            document.getElementById('progressLineCheckout').style.width = progress + '%';
+
+            // Update buttons
+            document.getElementById('prevBtn').style.display = currentCheckoutStep === 1 ? 'none' : 'flex';
+            document.getElementById('nextBtn').style.display = currentCheckoutStep === totalCheckoutSteps ? 'none' : 'flex';
+            document.getElementById('submitBtn').style.display = currentCheckoutStep === totalCheckoutSteps ? 'flex' : 'none';
+
+            // Update review section
+            if (currentCheckoutStep === 3) {
+                updateReviewSection();
+            }
+        }
+
+        function changeCheckoutStep(direction) {
+            currentCheckoutStep += direction;
+            if (currentCheckoutStep < 1) currentCheckoutStep = 1;
+            if (currentCheckoutStep > totalCheckoutSteps) currentCheckoutStep = totalCheckoutSteps;
+
+            updateCheckoutStepDisplay();
+        }
+
+        function updateReviewSection() {
+            const form = document.getElementById('checkoutForm');
+            const formData = new FormData(form);
+
+            // Update address
+            const address = `${formData.get('firstName')} ${formData.get('lastName')}<br>
+                ${formData.get('address')}<br>
+                ${formData.get('city')}, ${formData.get('postalCode')}<br>
+                ${formData.get('country')}<br>
+                Phone: ${formData.get('phone')}<br>
+                Email: ${formData.get('email')}`;
+            document.getElementById('reviewAddress').innerHTML = address;
+
+            // Update payment
+            const paymentMethod = formData.get('paymentMethod');
+            const paymentText = {
+                'card': 'Credit/Debit Card',
+                'paypal': 'PayPal',
+                'cod': 'Cash on Delivery'
+            };
+            document.getElementById('reviewPayment').textContent = paymentText[paymentMethod] || 'Not selected';
+        }
+
+        function loadOrderSummary() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const orderItemsContainer = document.getElementById('orderItems');
+
+            if (cart.length === 0) {
+                orderItemsContainer.innerHTML = '<p style="color: var(--text-muted);">No items in cart</p>';
+                return;
+            }
+
+            orderItemsContainer.innerHTML = cart.map(item => `
+                <div style="display: flex; gap: 1rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+                    <img src="${item.image}" alt="${item.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: var(--radius-md);">
+                    <div style="flex: 1;">
+                        <h6 style="margin: 0; font-size: 0.875rem; color: var(--text-primary);">${item.name}</h6>
+                        <p style="margin: 0.25rem 0 0; font-size: 0.75rem; color: var(--text-muted);">Qty: ${item.quantity}</p>
+                    </div>
+                    <span style="font-weight: 600; color: var(--text-primary);">$${(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+            `).join('');
+
+            // Calculate totals
+            const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            const shipping = subtotal > 100 ? 0 : 10;
+            const tax = subtotal * 0.1;
+            const total = subtotal + shipping + tax;
+
+            document.getElementById('summarySubtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('summaryShipping').textContent = shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`;
+            document.getElementById('summaryTax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('summaryTotal').textContent = `$${total.toFixed(2)}`;
+        }
+
+        function handleCheckout(event) {
+            event.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Processing...';
+
+            setTimeout(() => {
+                // Clear cart
+                localStorage.removeItem('cart');
+
+                if (window.ecommerce && window.ecommerce.showToast) {
+                    window.ecommerce.showToast('Order placed successfully!', 'success');
+                }
+
+                setTimeout(() => {
+                    window.location.href = 'order-confirmation.html';
+                }, 1500);
+            }, 2000);
+        }
+
+        // Payment method toggle
+        document.querySelectorAll('.payment-method').forEach(method => {
+            method.addEventListener('click', function () {
+                document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active'));
+                this.classList.add('active');
+                this.querySelector('input[type="radio"]').checked = true;
+
+                const cardDetails = document.getElementById('cardDetails');
+                if (this.querySelector('input').value === 'card') {
+                    cardDetails.style.display = 'block';
+                } else {
+                    cardDetails.style.display = 'none';
+                }
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCheckoutStepDisplay();
+            loadOrderSummary();
+        });
+    </script>
+</body>
+
+</html>

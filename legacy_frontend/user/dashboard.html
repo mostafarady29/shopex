@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="My Dashboard - SaaS Hub">
+    <title>Dashboard - SaaS Hub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+
+    <style>
+        .dashboard-sidebar {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-base);
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .dashboard-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="bi bi-hexagon-fill"></i> SaaS Hub
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../products/catalog.html">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../pages/about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../pages/contact.html">Contact</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn-icon" id="darkModeToggle">
+                        <i class="bi bi-moon-fill"></i>
+                    </button>
+
+                    <a href="../cart/cart.html" class="btn-icon position-relative">
+                        <i class="bi bi-cart3"></i>
+                        <span id="cartCounter"
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            style="display: none;">0</span>
+                    </a>
+
+                    <a href="dashboard.html" class="btn-icon">
+                        <i class="bi bi-person-fill"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div
+        style="background: var(--primary-gradient); padding: 2rem 0; color: white; position: relative; overflow: hidden;">
+        <img src="../assets/images/hero_store.png" alt=""
+            style="position: absolute; right: -30px; top: -20px; width: 260px; opacity: 0.15; pointer-events: none; animation: float 3s ease-in-out infinite;">
+        <div class="container">
+            <h1 style="font-size: 2rem; margin: 0;">My Dashboard</h1>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container" style="padding: 3rem 0;">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="dashboard-sidebar">
+                    <div
+                        style="text-align: center; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color);">
+                        <div
+                            style="width: 80px; height: 80px; margin: 0 auto 1rem; background: var(--primary-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: 700;">
+                            JD
+                        </div>
+                        <h5 style="margin: 0; color: var(--text-primary);">John Doe</h5>
+                        <p style="margin: 0.25rem 0 0; color: var(--text-muted); font-size: 0.875rem;">
+                            john.doe@example.com</p>
+                    </div>
+
+                    <ul class="sidebar-menu">
+                        <li><a href="dashboard.html" class="active"><i class="bi bi-speedometer2"></i> Customer
+                                Panel</a></li>
+                        <li><a href="affiliate-dashboard.html"><i class="bi bi-diagram-3"></i> Affiliate Dashboard</a>
+                        </li>
+                        <li><a href="orders.html"><i class="bi bi-box-seam"></i> My Subscriptions</a></li>
+                        <li><a href="profile.html"><i class="bi bi-person"></i> Profile</a></li>
+                        <li><a href="settings.html"><i class="bi bi-gear"></i> Settings</a></li>
+                        <li><a href="../auth/login.html"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <!-- Stats Cards -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <div class="stat-icon"
+                                style="background: rgba(0,210,255,0.15); color: var(--primary-color);">
+                                <i class="bi bi-box-seam"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>12</h3>
+                                <p>Total Orders</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <div class="stat-icon"
+                                style="background: rgba(124,58,237,0.15); color: var(--secondary-color);">
+                                <i class="bi bi-heart"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>8</h3>
+                                <p>Wishlist Items</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <div class="stat-icon"
+                                style="background: rgba(16,185,129,0.15); color: var(--success-color);">
+                                <i class="bi bi-wallet2"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>$2,450</h3>
+                                <p>Total Spent</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="dashboard-card">
+                    <h3 style="margin-bottom: 1.5rem;"><i class="bi bi-clock-history"></i> Recent Orders</h3>
+
+                    <div class="table-responsive">
+                        <table class="table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Date</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#ORD-2026-001</td>
+                                    <td>Jan 15, 2026</td>
+                                    <td>$299.99</td>
+                                    <td><span class="badge-custom badge-success">Delivered</span></td>
+                                    <td><a href="orders.html" style="color: var(--primary-color);">View</a></td>
+                                </tr>
+                                <tr>
+                                    <td>#ORD-2026-002</td>
+                                    <td>Jan 12, 2026</td>
+                                    <td>$1,299.99</td>
+                                    <td><span class="badge-custom badge-primary">Shipping</span></td>
+                                    <td><a href="orders.html" style="color: var(--primary-color);">Track</a></td>
+                                </tr>
+                                <tr>
+                                    <td>#ORD-2026-003</td>
+                                    <td>Jan 10, 2026</td>
+                                    <td>$89.99</td>
+                                    <td><span class="badge-custom badge-warning">Processing</span></td>
+                                    <td><a href="orders.html" style="color: var(--primary-color);">View</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="dashboard-card">
+                    <h3 style="margin-bottom: 1.5rem;"><i class="bi bi-lightning"></i> Quick Actions</h3>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <a href="../products/catalog.html" class="btn-custom btn-primary"
+                                style="width: 100%; display: block; text-align: center;">
+                                <i class="bi bi-shop"></i> Continue Shopping
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="orders.html" class="btn-custom btn-outline-primary"
+                                style="width: 100%; display: block; text-align: center;">
+                                <i class="bi bi-box-seam"></i> View All Orders
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: var(--bg-tertiary); padding: 3rem 0; margin-top: 4rem;">
+        <div class="container">
+            <div class="text-center">
+                <p style="color: var(--text-muted); font-size: 0.875rem; margin: 0;">
+                    © 2026 SaaS Hub. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+</body>
+
+</html>

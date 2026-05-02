@@ -1,0 +1,9 @@
+node_modules/
+.env
+.next/
+build/
+dist/
+python-ai/venv/
+__pycache__/
+*.pyc
+.DS_Store

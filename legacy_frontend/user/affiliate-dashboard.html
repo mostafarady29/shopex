@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affiliate Dashboard - SaaS Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <style>
+        .referral-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .referral-link-text {
+            font-family: monospace;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            word-break: break-all;
+        }
+
+        .dashboard-sidebar {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-base);
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .dashboard-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="bi bi-hexagon-fill"></i> SaaS Hub
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../products/catalog.html">Store Catalog</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <a href="../cart/cart.html" class="btn-icon position-relative">
+                        <i class="bi bi-cart3"></i>
+                        <span id="cartCounter"
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            style="display: none;">0</span>
+                    </a>
+                    <a href="dashboard.html" class="btn-icon"><i class="bi bi-person-fill"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div
+        style="background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); padding: 2.5rem 0; position: relative; overflow: hidden;">
+        <img src="../assets/images/hero_affiliate.png" alt=""
+            style="position: absolute; right: -30px; top: -30px; width: 280px; opacity: 0.15; pointer-events: none; animation: float 3s ease-in-out infinite;">
+        <div class="container">
+            <h1 style="font-size: 2.5rem; margin: 0; color: var(--text-primary);">Partner Portal</h1>
+            <p style="color: var(--primary-color); margin-top: 0.5rem; font-size: 1.1rem;">Precision growth for
+                strategic partners</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container" style="padding: 3rem 0;">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="dashboard-sidebar glass">
+                    <div
+                        style="text-align: center; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color);">
+                        <div
+                            style="width: 80px; height: 80px; margin: 0 auto 1rem; background: var(--primary-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: 700; box-shadow: var(--shadow-md);">
+                            JD
+                        </div>
+                        <h5 style="margin: 0; color: var(--text-primary);">John Doe</h5>
+                        <p style="margin: 0.25rem 0 0; color: var(--text-muted); font-size: 0.875rem;">Partner Level:
+                            <span style="color: var(--primary-color);">Pro</span>
+                        </p>
+                    </div>
+
+                    <ul class="sidebar-menu">
+                        <li><a href="dashboard.html"><i class="bi bi-person"></i> Customer Panel</a></li>
+                        <li><a href="affiliate-dashboard.html" class="active"><i class="bi bi-diagram-3"></i> Affiliate
+                                Dashboard</a></li>
+                        <li><a href="settings.html"><i class="bi bi-gear"></i> Settings</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <!-- Stats Cards -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-4">
+                        <div class="stat-card glass" style="border-top: 2px solid var(--success-color);">
+                            <div class="stat-icon"
+                                style="background: rgba(0, 242, 195, 0.1); color: var(--success-color);">
+                                <i class="bi bi-currency-dollar"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 style="color: var(--text-primary);">$1,850.00</h3>
+                                <p>Total Earnings</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card glass" style="border-top: 2px solid var(--primary-color);">
+                            <div class="stat-icon"
+                                style="background: rgba(0, 210, 255, 0.1); color: var(--primary-color);">
+                                <i class="bi bi-people"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 style="color: var(--text-primary);">124</h3>
+                                <p>Active Referrals</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card glass" style="border-top: 2px solid var(--secondary-color);">
+                            <div class="stat-icon"
+                                style="background: rgba(162, 62, 231, 0.1); color: var(--secondary-color);">
+                                <i class="bi bi-cursor"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 style="color: var(--text-primary);">18.5%</h3>
+                                <p>Click-through Rate</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Referral Link Section -->
+                <div class="dashboard-card glass">
+                    <h3 style="margin-bottom: 0.5rem; color: var(--text-primary);"><i class="bi bi-link-45deg"></i> Your
+                        Referral Link
+                    </h3>
+                    <p>Share this link to earn 20% commission on all starter plans and 30% on enterprise plans.</p>
+                    <div class="referral-box">
+                        <span class="referral-link-text">https://saashub.com/?ref=JOHNDOE2026</span>
+                        <button class="btn-custom btn-primary" onclick="alert('Link copied to clipboard!')">
+                            <i class="bi bi-copy"></i> Copy
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent Conversions -->
+                <div class="dashboard-card glass">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);"><i class="bi bi-bar-chart-line"></i>
+                        Recent
+                        Conversions</h3>
+                    <div class="table-responsive">
+                        <table class="table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>User</th>
+                                    <th>Plan Purchased</th>
+                                    <th>Commission</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Feb 18, 2026</td>
+                                    <td>alex_***@mail.com</td>
+                                    <td>Pro Plan ($99/mo)</td>
+                                    <td style="color: var(--success-color); font-weight: bold;">+$19.80</td>
+                                    <td><span class="badge-custom badge-success">Paid</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Feb 15, 2026</td>
+                                    <td>corp_***@business.io</td>
+                                    <td>Enterprise ($499/mo)</td>
+                                    <td style="color: var(--success-color); font-weight: bold;">+$149.70</td>
+                                    <td><span class="badge-custom badge-warning">Pending</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Feb 12, 2026</td>
+                                    <td>maria_***@email.com</td>
+                                    <td>Starter Plan ($29/mo)</td>
+                                    <td style="color: var(--success-color); font-weight: bold;">+$5.80</td>
+                                    <td><span class="badge-custom badge-success">Paid</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: var(--bg-tertiary); padding: 3rem 0; margin-top: 4rem;">
+        <div class="container">
+            <div class="text-center">
+                <p style="color: var(--text-muted); font-size: 0.875rem; margin: 0;">
+                    © 2026 SaaS Hub. Affiliate Program.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+</body>
+
+</html>

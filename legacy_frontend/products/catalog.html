@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Product Catalog - SaaS Hub">
+    <title>Products - SaaS Hub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="bi bi-hexagon-fill"></i> SaaS Hub
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="catalog.html">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../pages/about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../pages/contact.html">Contact</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn-icon" id="darkModeToggle" title="Toggle dark mode">
+                        <i class="bi bi-moon-fill"></i>
+                    </button>
+
+                    <a href="../cart/cart.html" class="btn-icon position-relative" title="Shopping cart">
+                        <i class="bi bi-cart3"></i>
+                        <span id="cartCounter"
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            style="display: none;">
+                            0
+                        </span>
+                    </a>
+
+                    <a href="../user/dashboard.html" class="btn-icon" title="My account">
+                        <i class="bi bi-person-fill"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div
+        style="background: var(--primary-gradient); padding: 3rem 0; color: white; position: relative; overflow: hidden;">
+        <img src="../assets/images/hero_catalog.png" alt=""
+            style="position: absolute; right: -30px; top: -30px; width: 280px; opacity: 0.2; pointer-events: none; animation: float 3s ease-in-out infinite;">
+        <div class="container">
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Digital Store</h1>
+            <p style="font-size: 1.125rem; margin: 0; opacity: 0.9;">Browse SaaS tools, templates, and plugins</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container" style="padding: 3rem 0;">
+        <div class="row">
+            <!-- Filters Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="filter-section">
+                    <h3 class="filter-title">Categories</h3>
+                    <div class="filter-options">
+                        <div class="filter-checkbox">
+                            <input type="checkbox" id="cat-subscriptions" value="Subscriptions" data-filter="category">
+                            <label for="cat-subscriptions">Subscriptions</label>
+                        </div>
+                        <div class="filter-checkbox">
+                            <input type="checkbox" id="cat-plugins" value="Plugins" data-filter="category">
+                            <label for="cat-plugins">Plugins</label>
+                        </div>
+                        <div class="filter-checkbox">
+                            <input type="checkbox" id="cat-templates" value="Templates" data-filter="category">
+                            <label for="cat-templates">Templates</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h3 class="filter-title">Price Range</h3>
+                    <div class="filter-options">
+                        <div class="filter-checkbox">
+                            <input type="checkbox" id="price-1" value="0-100" data-filter="price">
+                            <label for="price-1">Under $100</label>
+                        </div>
+                        <div class="filter-checkbox">
+                            <input type="checkbox" id="price-2" value="100-500" data-filter="price">
+                            <label for="price-2">$100 - $500</label>
+                        </div>
+                        <div class="filter-checkbox">
+                            <input type="checkbox" id="price-3" value="500-1000" data-filter="price">
+                            <label for="price-3">$500 - $1000</label>
+                        </div>
+                        <div class="filter-checkbox">
+                            <input type="checkbox" id="price-4" value="1000-99999" data-filter="price">
+                            <label for="price-4">Over $1000</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-section">
+                    <h3 class="filter-title">Sort By</h3>
+                    <select class="form-control" id="sortSelect">
+                        <option value="featured">Featured</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="name">Name: A to Z</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="col-lg-9">
+                <div class="row g-4" id="productGrid">
+                    <!-- Products will be loaded here -->
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-custom mt-5">
+                    <button class="pagination-item"><i class="bi bi-chevron-left"></i></button>
+                    <button class="pagination-item active">1</button>
+                    <button class="pagination-item">2</button>
+                    <button class="pagination-item">3</button>
+                    <button class="pagination-item"><i class="bi bi-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: var(--bg-tertiary); padding: 3rem 0; margin-top: 4rem;">
+        <div class="container">
+            <div class="text-center">
+                <p style="color: var(--text-muted); font-size: 0.875rem; margin: 0;">
+                    © 2026 SaaS Hub. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/components.js"></script>
+
+    <script>
+        let currentFilters = {
+            category: null,
+            minPrice: null,
+            maxPrice: null,
+            sort: 'featured'
+        };
+
+        async function loadProducts() {
+            const container = document.getElementById('productGrid');
+
+            // Show loading state
+            container.innerHTML = '<div class="col-12 text-center"><div class="spinner-border text-primary" role="status"></div></div>';
+
+            try {
+                // Fetch products from API
+                const response = await window.ecommerceAPI.products.getProducts(currentFilters);
+
+                if (response.success && response.data.length > 0) {
+                    container.innerHTML = response.data.map(product => `
+                        <div class="col-md-6 col-lg-4">
+                            <div class="product-card" data-product-id="${product._id}" data-category="${product.category}" data-price="${product.price}" data-name="${product.name}">
+                                <div class="product-card-image">
+                                    <img src="../${product.image}" alt="${product.name}">
+                                    ${product.badge ? `<span class="product-badge ${product.badge}">${product.badge === 'sale' ? 'SALE' : 'NEW'}</span>` : ''}
+                                    <div class="product-quick-actions">
+                                        <button class="product-quick-btn wishlist-btn" onclick="toggleWishlist('${product._id}')" title="Add to wishlist">
+                                            <i class="bi bi-heart"></i>
+                                        </button>
+                                        <button class="product-quick-btn" onclick="window.location.href='product-detail.html?id=${product._id}'" title="Quick view">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="product-card-body">
+                                    <p class="product-category">${product.category}</p>
+                                    <h3 class="product-title">${product.name}</h3>
+                                    <div class="product-rating">
+                                        <div class="product-stars">
+                                            ${'<i class="bi bi-star-fill"></i>'.repeat(Math.floor(product.rating))}
+                                            ${product.rating % 1 !== 0 ? '<i class="bi bi-star-half"></i>' : ''}
+                                        </div>
+                                        <span class="product-rating-count">(${product.numReviews || Math.floor(Math.random() * 500 + 100)})</span>
+                                    </div>
+                                    <div class="product-price">
+                                        <span class="product-price-current">$${product.price.toFixed(2)}</span>
+                                        ${product.originalPrice ? `<span class="product-price-original">$${product.originalPrice.toFixed(2)}</span>` : ''}
+                                    </div>
+                                </div>
+                                <div class="product-card-footer">
+                                    <button class="add-to-cart-btn" onclick="addProductToCart('${product._id}', '${product.name}', ${product.price}, '../${product.image}')">
+                                        <i class="bi bi-cart-plus"></i> Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = `
+                        <div class="col-12 text-center py-5">
+                            <i class="bi bi-inbox" style="font-size: 4rem; color: var(--text-muted);"></i>
+                            <h3 style="color: var(--text-secondary); margin-top: 1rem;">No products found</h3>
+                            <p style="color: var(--text-muted);">Try adjusting your filters</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading products:', error);
+                container.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="bi bi-exclamation-triangle" style="font-size: 4rem; color: var(--danger-color);"></i>
+                        <h3 style="color: var(--text-secondary); margin-top: 1rem;">Error loading products</h3>
+                        <p style="color: var(--text-muted);">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function applyFilters() {
+            // Get category filters
+            const categoryCheckboxes = document.querySelectorAll('input[data-filter="category"]:checked');
+            if (categoryCheckboxes.length > 0) {
+                currentFilters.category = categoryCheckboxes[0].value;
+            } else {
+                currentFilters.category = null;
+            }
+
+            // Get price filters
+            const priceCheckboxes = document.querySelectorAll('input[data-filter="price"]:checked');
+            if (priceCheckboxes.length > 0) {
+                const priceRange = priceCheckboxes[0].value.split('-');
+                currentFilters.minPrice = parseFloat(priceRange[0]);
+                currentFilters.maxPrice = parseFloat(priceRange[1]);
+            } else {
+                currentFilters.minPrice = null;
+                currentFilters.maxPrice = null;
+            }
+
+            // Get sort option
+            currentFilters.sort = document.getElementById('sortSelect').value;
+
+            // Reload products
+            loadProducts();
+        }
+
+        function addProductToCart(id, name, price, image) {
+            if (window.ecommerceComponents && window.ecommerceComponents.addToCart) {
+                window.ecommerceComponents.addToCart(id, name, price, image, 1);
+            }
+        }
+
+        function toggleWishlist(id) {
+            // Get wishlist from localStorage
+            let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            const index = wishlist.indexOf(id);
+
+            if (index > -1) {
+                wishlist.splice(index, 1);
+                if (window.ecommerce && window.ecommerce.showToast) {
+                    window.ecommerce.showToast('Removed from wishlist', 'info');
+                }
+            } else {
+                wishlist.push(id);
+                if (window.ecommerce && window.ecommerce.showToast) {
+                    window.ecommerce.showToast('Added to wishlist', 'success');
+                }
+            }
+
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+
+            // Update button state
+            const btn = event.currentTarget;
+            const icon = btn.querySelector('i');
+            if (index > -1) {
+                icon.className = 'bi bi-heart';
+                btn.classList.remove('active');
+            } else {
+                icon.className = 'bi bi-heart-fill';
+                btn.classList.add('active');
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProducts();
+
+            // Add filter change listeners
+            document.querySelectorAll('input[data-filter]').forEach(checkbox => {
+                checkbox.addEventListener('change', () => {
+                    // Uncheck other checkboxes in the same group
+                    const filterType = checkbox.dataset.filter;
+                    if (checkbox.checked) {
+                        document.querySelectorAll(`input[data-filter="${filterType}"]`).forEach(cb => {
+                            if (cb !== checkbox) cb.checked = false;
+                        });
+                    }
+                    applyFilters();
+                });
+            });
+
+            // Add sort change listener
+            document.getElementById('sortSelect').addEventListener('change', applyFilters);
+        });
+    </script>
+</body>
+
+</html>

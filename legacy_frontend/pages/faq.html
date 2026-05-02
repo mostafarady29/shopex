@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FAQ - SaaS Hub">
+    <title>Frequently Asked Questions - SaaS Hub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+
+    <style>
+        .faq-item {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all var(--transition-base);
+        }
+
+        .faq-question:hover {
+            background: var(--bg-secondary);
+        }
+
+        .faq-question h6 {
+            margin: 0;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .faq-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform var(--transition-base);
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-answer-content {
+            padding: 0 1.5rem 1.5rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="bi bi-hexagon-fill"></i> SaaS Hub
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../products/catalog.html">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn-icon" id="darkModeToggle">
+                        <i class="bi bi-moon-fill"></i>
+                    </button>
+
+                    <a href="../cart/cart.html" class="btn-icon position-relative">
+                        <i class="bi bi-cart3"></i>
+                        <span id="cartCounter"
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            style="display: none;">0</span>
+                    </a>
+
+                    <a href="../user/dashboard.html" class="btn-icon">
+                        <i class="bi bi-person-fill"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div style="background: var(--primary-gradient); padding: 4rem 0; color: white; text-align: center;">
+        <div class="container">
+            <h1 style="font-size: 3rem; margin-bottom: 1rem;">Frequently Asked Questions</h1>
+            <p style="font-size: 1.25rem; max-width: 600px; margin: 0 auto; opacity: 0.9;">
+                Find answers to common questions about shopping with SaaS Hub
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container" style="padding: 4rem 0;">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <!-- General Questions -->
+                <h2 style="margin-bottom: 2rem; color: var(--text-primary);">General Questions</h2>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h6>How do I create an account?</h6>
+                        <div class="faq-icon">
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Click on the "Login" button in the top right corner, then select "Sign Up". Fill in your
+                            details including email, password, and personal information. You'll receive a confirmation
+                            email to verify your account.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h6>Is my personal information secure?</h6>
+                        <div class="faq-icon">
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Yes, we use industry-standard SSL encryption to protect your personal and payment
+                            information. We never share your data with third parties without your consent.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ordering & Payment -->
+                <h2 style="margin: 3rem 0 2rem; color: var(--text-primary);">Ordering & Payment</h2>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h6>What payment methods do you accept?</h6>
+                        <div class="faq-icon">
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and Cash on
+                            Delivery for eligible orders.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h6>Can I modify or cancel my order?</h6>
+                        <div class="faq-icon">
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            You can modify or cancel your order within 1 hour of placing it. After that, the order
+                            enters processing and cannot be changed. Contact our support team for assistance.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h6>Do you offer discounts or coupon codes?</h6>
+                        <div class="faq-icon">
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Yes! Subscribe to our newsletter to receive exclusive discount codes and be the first to
+                            know about sales and promotions.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping & Delivery -->
+                <h2 style="margin: 3rem 0 2rem; color: var(--text-primary);">Shipping & Delivery</h2>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h6>How long does shipping take?</h6>
+                        <div class="faq-icon">
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Standard shipping takes 5-7 business days. Express shipping (2-3 business days) is available
+                            for an additional fee. International orders may take 10-15 business days.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h6>Do you offer free shipping?</h6>
+                        <div class="faq-icon">
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Yes! We offer free standard shipping on all orders over $100. Orders under $100 have a flat
+                            shipping fee of $10.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h6>How can I track my order?</h6>
+                        <div class="faq-icon">
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Once your order ships, you'll receive a tracking number via email. You can also track your
+                            order by logging into your account and viewing your order history.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Returns & Refunds -->
+                <h2 style="margin: 3rem 0 2rem; color: var(--text-primary);">Returns & Refunds</h2>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h6>What is your return policy?</h6>
+                        <div class="faq-icon">
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            We offer a 30-day return policy for most items. Products must be unused and in original
+                            packaging. Some items like electronics may have different return policies.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <h6>How long does it take to process a refund?</h6>
+                        <div class="faq-icon">
+                            <i class="bi bi-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Refunds are processed within 5-7 business days after we receive your returned item. The
+                            refund will be credited to your original payment method.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Still Have Questions -->
+                <div
+                    style="background: var(--bg-secondary); padding: 3rem; border-radius: var(--radius-xl); text-align: center; margin-top: 4rem;">
+                    <h3 style="margin-bottom: 1rem; color: var(--text-primary);">Still Have Questions?</h3>
+                    <p style="margin-bottom: 2rem; color: var(--text-secondary);">
+                        Can't find the answer you're looking for? Our customer support team is here to help!
+                    </p>
+                    <a href="contact.html" class="btn-custom btn-primary">
+                        <i class="bi bi-envelope"></i> Contact Support
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: var(--bg-tertiary); padding: 3rem 0; margin-top: 4rem;">
+        <div class="container">
+            <div class="text-center">
+                <p style="color: var(--text-muted); font-size: 0.875rem; margin: 0;">
+                    © 2026 SaaS Hub. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+
+    <script>
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const wasActive = faqItem.classList.contains('active');
+
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Toggle current item
+            if (!wasActive) {
+                faqItem.classList.add('active');
+            }
+        }
+    </script>
+</body>
+
+</html>

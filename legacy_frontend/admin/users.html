@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="User Management - SaaS Hub Admin">
+    <title>Users - SaaS Hub Admin</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="../index.html">
+                <i class="bi bi-hexagon-fill"></i> SaaS Hub Admin
+            </a>
+
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn-icon" id="darkModeToggle">
+                    <i class="bi bi-moon-fill"></i>
+                </button>
+
+                <div class="dropdown">
+                    <button class="btn-icon" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="../user/profile.html">Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="../auth/login.html">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid" style="padding: 3rem 2rem;">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-2 mb-4">
+                <div class="admin-sidebar">
+                    <ul class="sidebar-menu">
+                        <li><a href="dashboard.html"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                        <li><a href="products.html"><i class="bi bi-box"></i> Products</a></li>
+                        <li><a href="orders.html"><i class="bi bi-cart"></i> Orders</a></li>
+                        <li><a href="users.html" class="active"><i class="bi bi-people"></i> Users</a></li>
+                        <li><a href="../index.html"><i class="bi bi-globe"></i> View Site</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-10">
+                <h1 style="margin-bottom: 2rem; color: var(--text-primary);">User Management</h1>
+
+                <!-- Stats -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon"
+                                style="background: rgba(0,210,255,0.15); color: var(--primary-color);">
+                                <i class="bi bi-people"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>1,234</h3>
+                                <p>Total Users</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon"
+                                style="background: linear-gradient(135deg, #00f2c3 0%, #0098f0 100%);">
+                                <i class="bi bi-person-check"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>1,180</h3>
+                                <p>Active Users</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon"
+                                style="background: rgba(124,58,237,0.15); color: var(--secondary-color);">
+                                <i class="bi bi-person-plus"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>45</h3>
+                                <p>New This Month</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="stat-card">
+                            <div class="stat-icon"
+                                style="background: linear-gradient(135deg, #ffd93d 0%, #ff6b9d 100%);">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3>12</h3>
+                                <p>Admins</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="card-custom mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" placeholder="Search by name or email...">
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-control">
+                                <option value="">All Roles</option>
+                                <option value="admin">Admin</option>
+                                <option value="customer">Customer</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select class="form-control">
+                                <option value="">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn-custom btn-outline-primary" style="width: 100%;">
+                                <i class="bi bi-funnel"></i> Filter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Table -->
+                <div class="card-custom">
+                    <div class="table-responsive">
+                        <table class="table-custom">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Orders</th>
+                                    <th>Total Spent</th>
+                                    <th>Joined</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 1rem;">
+                                            <div
+                                                style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                                                JD
+                                            </div>
+                                            <h6 style="margin: 0; color: var(--text-primary);">John Doe</h6>
+                                        </div>
+                                    </td>
+                                    <td>john.doe@example.com</td>
+                                    <td><span class="badge-custom badge-primary">Customer</span></td>
+                                    <td>12</td>
+                                    <td>$2,450.00</td>
+                                    <td>Jan 5, 2025</td>
+                                    <td><span class="badge-custom badge-success">Active</span></td>
+                                    <td>
+                                        <button class="btn-icon btn-sm" title="View Details">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-sm" title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn-icon btn-sm" title="Block">
+                                            <i class="bi bi-ban"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 1rem;">
+                                            <div
+                                                style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                                                SM
+                                            </div>
+                                            <h6 style="margin: 0; color: var(--text-primary);">Sarah Miller</h6>
+                                        </div>
+                                    </td>
+                                    <td>sarah.m@example.com</td>
+                                    <td><span class="badge-custom badge-warning">Admin</span></td>
+                                    <td>8</td>
+                                    <td>$1,890.00</td>
+                                    <td>Dec 20, 2024</td>
+                                    <td><span class="badge-custom badge-success">Active</span></td>
+                                    <td>
+                                        <button class="btn-icon btn-sm" title="View Details">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-sm" title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn-icon btn-sm" title="Block">
+                                            <i class="bi bi-ban"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 1rem;">
+                                            <div
+                                                style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                                                MJ
+                                            </div>
+                                            <h6 style="margin: 0; color: var(--text-primary);">Mike Johnson</h6>
+                                        </div>
+                                    </td>
+                                    <td>mike.j@example.com</td>
+                                    <td><span class="badge-custom badge-primary">Customer</span></td>
+                                    <td>3</td>
+                                    <td>$450.00</td>
+                                    <td>Jan 10, 2026</td>
+                                    <td><span class="badge-custom badge-success">Active</span></td>
+                                    <td>
+                                        <button class="btn-icon btn-sm" title="View Details">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn-icon btn-sm" title="Edit">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn-icon btn-sm" title="Block">
+                                            <i class="bi bi-ban"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination-custom mt-4">
+                        <button class="pagination-item"><i class="bi bi-chevron-left"></i></button>
+                        <button class="pagination-item active">1</button>
+                        <button class="pagination-item">2</button>
+                        <button class="pagination-item">3</button>
+                        <button class="pagination-item"><i class="bi bi-chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+</body>
+
+</html>

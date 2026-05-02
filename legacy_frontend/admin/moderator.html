@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moderator Panel - SaaS Hub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+    <style>
+        .mod-sidebar {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-base);
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .flag-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: all var(--transition-base);
+        }
+
+        .flag-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .flag-severity {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .severity-high {
+            background: rgba(239, 68, 68, 0.15);
+            color: #EF4444;
+        }
+
+        .severity-medium {
+            background: rgba(245, 158, 11, 0.15);
+            color: #F59E0B;
+        }
+
+        .severity-low {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10B981;
+        }
+
+        .action-btn {
+            padding: 0.4rem 0.8rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all var(--transition-base);
+        }
+
+        .action-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .action-btn.danger:hover {
+            background: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="../index.html">
+                <i class="bi bi-hexagon-fill"></i> SaaS Hub <span
+                    style="font-size: 0.75rem; color: var(--warning-color);">MOD</span>
+            </a>
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn-icon" id="darkModeToggle"><i class="bi bi-moon-fill"></i></button>
+                <div class="dropdown">
+                    <button class="btn-icon" data-bs-toggle="dropdown"><i class="bi bi-person-circle"></i></button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="../user/dashboard.html">My Account</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="../auth/login.html" onclick="localStorage.clear()">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header with Hero Image -->
+    <div
+        style="position: relative; overflow: hidden; padding: 2.5rem 0; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color);">
+        <img src="../assets/images/hero_admin.png" alt=""
+            style="position: absolute; right: -50px; top: -30px; width: 280px; opacity: 0.15; pointer-events: none;">
+        <div class="container-fluid px-4">
+            <h1 style="font-size: 2rem; margin: 0; color: var(--text-primary);"><i class="bi bi-shield-check"></i>
+                Moderator Panel</h1>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Review flagged content and manage community</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container-fluid" style="padding: 2rem;">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-2 mb-4">
+                <div class="mod-sidebar glass">
+                    <ul class="sidebar-menu">
+                        <li><a href="moderator.html" class="active"><i class="bi bi-flag"></i> Flagged Items</a></li>
+                        <li><a href="#"><i class="bi bi-chat-dots"></i> Reviews</a></li>
+                        <li><a href="#"><i class="bi bi-person-x"></i> Reported Users</a></li>
+                        <li><a href="#"><i class="bi bi-journal-text"></i> Activity Log</a></li>
+                        <li><a href="../index.html"><i class="bi bi-globe"></i> View Site</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-10">
+                <!-- Stats -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="stat-card glass" style="border-top: 2px solid var(--danger-color);">
+                            <div class="stat-icon" style="background: rgba(239,68,68,0.1); color: var(--danger-color);">
+                                <i class="bi bi-flag-fill"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 style="color: var(--text-primary);">23</h3>
+                                <p>Pending Flags</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card glass" style="border-top: 2px solid var(--warning-color);">
+                            <div class="stat-icon"
+                                style="background: rgba(245,158,11,0.1); color: var(--warning-color);">
+                                <i class="bi bi-chat-left-text"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 style="color: var(--text-primary);">8</h3>
+                                <p>Review Queue</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card glass" style="border-top: 2px solid var(--success-color);">
+                            <div class="stat-icon"
+                                style="background: rgba(16,185,129,0.1); color: var(--success-color);">
+                                <i class="bi bi-check2-all"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 style="color: var(--text-primary);">156</h3>
+                                <p>Resolved This Week</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card glass" style="border-top: 2px solid var(--primary-color);">
+                            <div class="stat-icon"
+                                style="background: rgba(0,210,255,0.1); color: var(--primary-color);">
+                                <i class="bi bi-person-x"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 style="color: var(--text-primary);">3</h3>
+                                <p>Reported Users</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flagged Items -->
+                <div class="card-custom glass mb-4">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);"><i class="bi bi-flag"></i> Flagged
+                        Content</h3>
+
+                    <div class="flag-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <span class="flag-severity severity-high">High</span>
+                                <span style="color: var(--text-muted); font-size: 0.8rem; margin-left: 0.5rem;">10 min
+                                    ago</span>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="action-btn"><i class="bi bi-check-lg"></i> Approve</button>
+                                <button class="action-btn danger"><i class="bi bi-trash"></i> Remove</button>
+                            </div>
+                        </div>
+                        <h6 style="color: var(--text-primary); margin-bottom: 0.25rem;">Spam review on "SaaS CRM Pro"
+                        </h6>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">User
+                            <strong>spammer_42</strong> posted promotional content in the review section. Contains
+                            external links.</p>
+                    </div>
+
+                    <div class="flag-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <span class="flag-severity severity-medium">Medium</span>
+                                <span style="color: var(--text-muted); font-size: 0.8rem; margin-left: 0.5rem;">1 hour
+                                    ago</span>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="action-btn"><i class="bi bi-check-lg"></i> Approve</button>
+                                <button class="action-btn danger"><i class="bi bi-trash"></i> Remove</button>
+                            </div>
+                        </div>
+                        <h6 style="color: var(--text-primary); margin-bottom: 0.25rem;">Inappropriate username reported
+                        </h6>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">User
+                            <strong>offensive_name_99</strong> was reported by 3 community members for violating naming
+                            policy.</p>
+                    </div>
+
+                    <div class="flag-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <span class="flag-severity severity-low">Low</span>
+                                <span style="color: var(--text-muted); font-size: 0.8rem; margin-left: 0.5rem;">3 hours
+                                    ago</span>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="action-btn"><i class="bi bi-check-lg"></i> Approve</button>
+                                <button class="action-btn danger"><i class="bi bi-trash"></i> Remove</button>
+                            </div>
+                        </div>
+                        <h6 style="color: var(--text-primary); margin-bottom: 0.25rem;">Duplicate review detected</h6>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">User
+                            <strong>jane_doe</strong> submitted a duplicate review for "Email Marketing Plugin".</p>
+                    </div>
+
+                    <div class="flag-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <span class="flag-severity severity-high">High</span>
+                                <span style="color: var(--text-muted); font-size: 0.8rem; margin-left: 0.5rem;">5 hours
+                                    ago</span>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="action-btn"><i class="bi bi-check-lg"></i> Approve</button>
+                                <button class="action-btn danger"><i class="bi bi-trash"></i> Remove</button>
+                            </div>
+                        </div>
+                        <h6 style="color: var(--text-primary); margin-bottom: 0.25rem;">Potential fraud referral</h6>
+                        <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">Affiliate
+                            <strong>fraud_alert_ref</strong> shows 50+ signups from the same IP range. Possible
+                            self-referral abuse.</p>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Log -->
+                <div class="card-custom glass">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);"><i class="bi bi-clock-history"></i>
+                        Recent Moderation Log</h3>
+                    <div class="table-responsive">
+                        <table class="table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Action</th>
+                                    <th>Target</th>
+                                    <th>Moderator</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Apr 19, 02:00</td>
+                                    <td>Review Removed</td>
+                                    <td>SaaS CRM Pro</td>
+                                    <td>You</td>
+                                    <td><span class="badge-custom badge-success">Done</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Apr 19, 01:30</td>
+                                    <td>User Warned</td>
+                                    <td>@spammer_42</td>
+                                    <td>You</td>
+                                    <td><span class="badge-custom badge-warning">Warning Sent</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Apr 18, 23:15</td>
+                                    <td>Content Approved</td>
+                                    <td>Analytics Dashboard</td>
+                                    <td>mod_sarah</td>
+                                    <td><span class="badge-custom badge-success">Done</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+</body>
+
+</html>

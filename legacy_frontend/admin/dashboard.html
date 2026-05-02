@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin Dashboard - SaaS Hub">
+    <title>Admin Dashboard - SaaS Hub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
+
+    <style>
+        .admin-sidebar {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            position: sticky;
+            top: 100px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-base);
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .mini-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 40px;
+        }
+
+        .mini-chart .bar {
+            width: 6px;
+            border-radius: 3px;
+            background: var(--primary-color);
+            opacity: 0.6;
+            animation: barGrow 1s ease-out forwards;
+        }
+
+        @keyframes barGrow {
+            from {
+                height: 0;
+            }
+        }
+
+        .trend-up {
+            color: var(--success-color);
+            font-size: 0.8rem;
+        }
+
+        .trend-down {
+            color: var(--danger-color);
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="../index.html">
+                <i class="bi bi-hexagon-fill"></i> SaaS Hub <span
+                    style="font-size: 0.7rem; background: var(--danger-color); color: white; padding: 0.15rem 0.5rem; border-radius: var(--radius-full); margin-left: 0.5rem;">ADMIN</span>
+            </a>
+
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn-icon" id="darkModeToggle">
+                    <i class="bi bi-moon-fill"></i>
+                </button>
+
+                <div class="dropdown">
+                    <button class="btn-icon" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="../user/dashboard.html">My Account</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="../auth/login.html" onclick="localStorage.clear()">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Header -->
+    <div
+        style="position: relative; overflow: hidden; padding: 2.5rem 0; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color);">
+        <img src="../assets/images/hero_admin.png" alt=""
+            style="position: absolute; right: -30px; top: -40px; width: 300px; opacity: 0.2; pointer-events: none;">
+        <div class="container-fluid px-4">
+            <h1 style="font-size: 2rem; margin: 0; color: var(--text-primary);"><i
+                    class="bi bi-gear-wide-connected"></i> Admin Control Center</h1>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Full system overview and management</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container-fluid" style="padding: 2rem;">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-2 mb-4">
+                <div class="admin-sidebar glass">
+                    <ul class="sidebar-menu">
+                        <li><a href="dashboard.html" class="active"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                        </li>
+                        <li><a href="products.html"><i class="bi bi-box"></i> Products</a></li>
+                        <li><a href="orders.html"><i class="bi bi-cart"></i> Orders</a></li>
+                        <li><a href="users.html"><i class="bi bi-people"></i> Users</a></li>
+                        <li><a href="moderator.html"><i class="bi bi-shield-check"></i> Moderator</a></li>
+                        <li><a href="../index.html"><i class="bi bi-globe"></i> View Site</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-10">
+                <!-- Stats Cards -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="stat-card glass" style="border-top: 2px solid var(--primary-color);">
+                            <div class="stat-icon"
+                                style="background: rgba(0,210,255,0.1); color: var(--primary-color);">
+                                <i class="bi bi-currency-dollar"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 style="color: var(--text-primary);">$45,231</h3>
+                                <p>Total Revenue</p>
+                                <span class="trend-up"><i class="bi bi-arrow-up-short"></i> +12.5%</span>
+                            </div>
+                            <div class="mini-chart">
+                                <div class="bar" style="height: 15px;"></div>
+                                <div class="bar" style="height: 25px;"></div>
+                                <div class="bar" style="height: 18px;"></div>
+                                <div class="bar" style="height: 30px;"></div>
+                                <div class="bar" style="height: 22px;"></div>
+                                <div class="bar" style="height: 35px;"></div>
+                                <div class="bar" style="height: 40px; opacity: 1;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="stat-card glass" style="border-top: 2px solid var(--success-color);">
+                            <div class="stat-icon"
+                                style="background: rgba(16,185,129,0.1); color: var(--success-color);">
+                                <i class="bi bi-cart-check"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 style="color: var(--text-primary);">324</h3>
+                                <p>Total Orders</p>
+                                <span class="trend-up"><i class="bi bi-arrow-up-short"></i> +8.3%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="stat-card glass" style="border-top: 2px solid var(--secondary-color);">
+                            <div class="stat-icon"
+                                style="background: rgba(124,58,237,0.1); color: var(--secondary-color);">
+                                <i class="bi bi-box-seam"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 style="color: var(--text-primary);">156</h3>
+                                <p>Products</p>
+                                <span class="trend-up"><i class="bi bi-arrow-up-short"></i> +3 new</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="stat-card glass" style="border-top: 2px solid var(--warning-color);">
+                            <div class="stat-icon"
+                                style="background: rgba(245,158,11,0.1); color: var(--warning-color);">
+                                <i class="bi bi-people"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 style="color: var(--text-primary);">1,234</h3>
+                                <p>Customers</p>
+                                <span class="trend-up"><i class="bi bi-arrow-up-short"></i> +15.2%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Ledger -->
+                <div class="card-custom glass mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 style="margin: 0; color: var(--text-primary);"><i class="bi bi-clock-history"></i> Recent
+                            Orders</h3>
+                        <a href="orders.html" class="btn-custom btn-outline-primary btn-sm">View All</a>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Product</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#ORD-2026-001</td>
+                                    <td>John Doe</td>
+                                    <td>SaaS CRM Pro</td>
+                                    <td>$99.99</td>
+                                    <td><span class="badge-custom badge-success">Completed</span></td>
+                                    <td>
+                                        <button class="btn-icon btn-sm"><i class="bi bi-eye"></i></button>
+                                        <button class="btn-icon btn-sm"><i class="bi bi-pencil"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#ORD-2026-002</td>
+                                    <td>Sarah Miller</td>
+                                    <td>Analytics Dashboard</td>
+                                    <td>$199.99</td>
+                                    <td><span class="badge-custom badge-primary">Processing</span></td>
+                                    <td>
+                                        <button class="btn-icon btn-sm"><i class="bi bi-eye"></i></button>
+                                        <button class="btn-icon btn-sm"><i class="bi bi-pencil"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#ORD-2026-003</td>
+                                    <td>Mike Johnson</td>
+                                    <td>Landing Page Template</td>
+                                    <td>$89.99</td>
+                                    <td><span class="badge-custom badge-warning">Pending</span></td>
+                                    <td>
+                                        <button class="btn-icon btn-sm"><i class="bi bi-eye"></i></button>
+                                        <button class="btn-icon btn-sm"><i class="bi bi-pencil"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Affiliate Network Overview -->
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card-custom glass">
+                            <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);"><i
+                                    class="bi bi-diagram-3"></i> Top Affiliates</h3>
+                            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                <div
+                                    style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-md);">
+                                    <div
+                                        style="width: 40px; height: 40px; background: var(--primary-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">
+                                        1</div>
+                                    <div style="flex: 1;">
+                                        <h6 style="margin: 0; color: var(--text-primary);">Alex Thompson</h6>
+                                        <small style="color: var(--text-muted);">142 referrals</small>
+                                    </div>
+                                    <span style="color: var(--success-color); font-weight: 700;">$4,260</span>
+                                </div>
+                                <div
+                                    style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-md);">
+                                    <div
+                                        style="width: 40px; height: 40px; background: var(--secondary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">
+                                        2</div>
+                                    <div style="flex: 1;">
+                                        <h6 style="margin: 0; color: var(--text-primary);">Maria Garcia</h6>
+                                        <small style="color: var(--text-muted);">98 referrals</small>
+                                    </div>
+                                    <span style="color: var(--success-color); font-weight: 700;">$2,940</span>
+                                </div>
+                                <div
+                                    style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-md);">
+                                    <div
+                                        style="width: 40px; height: 40px; background: var(--warning-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">
+                                        3</div>
+                                    <div style="flex: 1;">
+                                        <h6 style="margin: 0; color: var(--text-primary);">James Wilson</h6>
+                                        <small style="color: var(--text-muted);">76 referrals</small>
+                                    </div>
+                                    <span style="color: var(--success-color); font-weight: 700;">$2,280</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-custom glass">
+                            <h3 style="margin-bottom: 1.5rem; color: var(--text-primary);"><i class="bi bi-trophy"></i>
+                                Top Selling Products</h3>
+                            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                <div
+                                    style="display: flex; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-md);">
+                                    <img src="../assets/images/product_headphones_1768510726683.png" alt="Product"
+                                        style="width: 60px; height: 60px; object-fit: cover; border-radius: var(--radius-md);">
+                                    <div style="flex: 1;">
+                                        <h6 style="margin: 0; color: var(--text-primary);">SaaS CRM Pro</h6>
+                                        <small style="color: var(--text-muted);">Sales: 245 licenses</small>
+                                    </div>
+                                    <span style="color: var(--primary-color); font-weight: 600;">$24,475</span>
+                                </div>
+                                <div
+                                    style="display: flex; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-md);">
+                                    <img src="../assets/images/product_camera_1768510785099.png" alt="Product"
+                                        style="width: 60px; height: 60px; object-fit: cover; border-radius: var(--radius-md);">
+                                    <div style="flex: 1;">
+                                        <h6 style="margin: 0; color: var(--text-primary);">Analytics Dashboard</h6>
+                                        <small style="color: var(--text-muted);">Sales: 89 licenses</small>
+                                    </div>
+                                    <span style="color: var(--primary-color); font-weight: 600;">$17,791</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/main.js"></script>
+</body>
+
+</html>

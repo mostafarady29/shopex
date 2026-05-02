@@ -1,0 +1,71 @@
+{
+    "name": "BENTO_DATA_BROKER",
+    "version": "2.0.0",
+    "color": {
+        "primitive": {
+            "slate": {
+                "50": "#F8FAFC",
+                "100": "#F1F5F9",
+                "200": "#E2E8F0",
+                "300": "#CBD5E1",
+                "400": "#94A3B8",
+                "500": "#64748B",
+                "600": "#475569",
+                "700": "#334155",
+                "800": "#1E293B",
+                "900": "#0F172A",
+                "950": "#0F1115"
+            },
+            "blue": {
+                "500": "#3B82F6",
+                "600": "#2563EB",
+                "700": "#1D4ED8"
+            },
+            "emerald": {
+                "500": "#10B981",
+                "600": "#059669"
+            }
+        },
+        "semantic": {
+            "background": {
+                "primary": "{color.primitive.slate.950}",
+                "secondary": "{color.primitive.slate.900}",
+                "tertiary": "{color.primitive.slate.800}"
+            },
+            "text": {
+                "primary": "{color.primitive.slate.50}",
+                "secondary": "{color.primitive.slate.400}",
+                "muted": "{color.primitive.slate.500}"
+            },
+            "brand": {
+                "accent": "{color.primitive.blue.500}",
+                "accent-hover": "{color.primitive.blue.600}",
+                "secondary": "{color.primitive.emerald.500}"
+            },
+            "border": {
+                "default": "{color.primitive.slate.700}",
+                "hover": "{color.primitive.slate.600}"
+            }
+        }
+    },
+    "typography": {
+        "fontFamily": {
+            "display": "'Fira Code', monospace",
+            "body": "'Fira Sans', sans-serif"
+        }
+    },
+    "spacing": {
+        "0": "0",
+        "1": "0.25rem",
+        "2": "0.5rem",
+        "3": "1rem",
+        "4": "2rem",
+        "5": "4rem",
+        "6": "8rem"
+    },
+    "borderRadius": {
+        "none": "0",
+        "md": "12px",
+        "lg": "24px"
+    }
+}
