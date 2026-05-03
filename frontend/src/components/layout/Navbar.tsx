@@ -118,16 +118,16 @@ export const Navbar = () => {
           </div>
 
           {/* Search ──────────────────────────────────────────── */}
-          <div className="flex-1 relative" id="navbar-search">
+          <div className="flex-1 relative min-w-0" id="navbar-search">
             <form
               onSubmit={handleSearch}
-              className={`flex items-center bg-[#F7F7F7] rounded-xl border-2 transition-all duration-200 ${
+              className={`flex items-center w-full bg-[#F7F7F7] rounded-xl border-2 transition-all duration-200 min-w-0 ${
                 focused
                   ? "border-[#FF9900] bg-white shadow-sm"
                   : "border-transparent hover:border-[#E5E5E5]"
               }`}
             >
-              <Search className="ml-3 w-4 h-4 text-[#888] flex-shrink-0" />
+              <Search className="ml-2 sm:ml-3 w-4 h-4 text-[#888] flex-shrink-0 hidden sm:block" />
               <input
                 ref={inputRef}
                 type="text"
@@ -135,8 +135,8 @@ export const Navbar = () => {
                 onChange={(e) => setQuery(e.target.value)}
                 onFocus={() => setFocused(true)}
                 onBlur={() => setTimeout(() => setFocused(false), 150)}
-                placeholder="Search products, brands, categories…"
-                className="flex-1 bg-transparent py-2.5 px-3 text-sm text-[#111] placeholder:text-[#AAAAAA] focus:outline-none min-w-0"
+                placeholder="Search products..."
+                className="flex-1 bg-transparent py-2 sm:py-2.5 px-3 text-sm text-[#111] placeholder:text-[#AAAAAA] focus:outline-none min-w-0 w-full text-ellipsis"
                 aria-label="Search products"
                 autoComplete="off"
               />
