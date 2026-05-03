@@ -12,7 +12,6 @@ import {
   ChevronRight,
   Star,
   TrendingUp,
-  TrendingUp,
 } from "lucide-react";
 import api from "@/lib/axios";
 import { useCartStore } from "@/store/useCartStore";
