@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, AlertCircle, Loader2, ChevronRight } from "lucide-react";
@@ -11,10 +11,22 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const router = useRouter();
   
-  const { login, loading, error: authError, isAuthenticated } = useAuthStore();
+  const { login, loading, error: authError, isAuthenticated, user } = useAuthStore();
   const [localError, setLocalError] = useState("");
 
   const error = localError || authError;
+
+  useEffect(() => {
+    if (!loading && isAuthenticated && user) {
+      if (user.role === "admin" || user.role === "supervisor") {
+        router.push("/admin");
+      } else if (user.role === "affiliate") {
+        router.push("/affiliate");
+      } else {
+        router.push("/orders");
+      }
+    }
+  }, [loading, isAuthenticated, user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +39,7 @@ export default function LoginPage() {
 
     try {
       await login({ email, password });
-      router.push("/");
+      // Redirect happens automatically via useEffect
     } catch (err) {
       // Error is handled by the store
     }

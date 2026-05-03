@@ -5,17 +5,26 @@ import Link from "next/link";
 import { Home, Search, ShoppingCart, User, Heart } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-
-const navItems = [
-  { label: "Home",     icon: Home,         href: "/" },
-  { label: "Search",   icon: Search,       href: "/search" },
-  { label: "Wishlist", icon: Heart,        href: "/wishlist" },
-  { label: "Cart",     icon: ShoppingCart, href: "/cart",    badge: 3 },
-  { label: "Account",  icon: User,         href: "/auth/login" },
-];
+import { useAuthStore } from "@/store/useAuthStore";
 
 export const MobileNav = () => {
   const pathname = usePathname();
+  const { isAuthenticated, user } = useAuthStore();
+
+  const getAccountHref = () => {
+    if (!isAuthenticated || !user) return "/auth/login";
+    if (user.role === "admin" || user.role === "supervisor") return "/admin";
+    if (user.role === "affiliate") return "/affiliate";
+    return "/orders";
+  };
+
+  const navItems = [
+    { label: "Home",     icon: Home,         href: "/" },
+    { label: "Search",   icon: Search,       href: "/search" },
+    { label: "Wishlist", icon: Heart,        href: "/wishlist" },
+    { label: "Cart",     icon: ShoppingCart, href: "/cart",    badge: 3 },
+    { label: "Account",  icon: User,         href: getAccountHref() },
+  ];
 
   return (
     <nav
