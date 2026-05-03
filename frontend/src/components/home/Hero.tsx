@@ -64,7 +64,7 @@ export const Hero = () => {
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
 
           {/* ── Left: Copy ────────────────────────────── */}
-          <div className="flex-1 max-w-xl">
+          <div className="flex-1 w-full max-w-xl">
             {/* Pill badge */}
             <motion.div
               custom={0}
