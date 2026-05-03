@@ -48,6 +48,25 @@ router.get('/', async (req, res, next) => {
     }
 });
 
+// GET /api/products/admin/all - Get all products for admin (includes inactive)
+router.get('/admin/all', protect, authorize('admin', 'moderator'), async (req, res, next) => {
+    try {
+        const { search, status } = req.query;
+        const where = {};
+        if (search) where.name = { contains: search, mode: 'insensitive' };
+        if (status) where.status = status;
+
+        const products = await prisma.product.findMany({
+            where,
+            orderBy: { createdAt: 'desc' },
+            take: 100,
+        });
+        res.json({ success: true, data: products });
+    } catch (err) {
+        next(err);
+    }
+});
+
 // GET /api/products/:id - Get single product
 router.get('/:id', async (req, res, next) => {
     try {
