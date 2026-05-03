@@ -245,7 +245,7 @@ export default function UsersPage() {
       if (search)     params.search = search;
       if (roleFilter) params.role   = roleFilter;
       const res = await api.get("/admin/users", { params });
-      setUsers(res.data?.data || []);
+      setUsers(res.data?.users || res.data?.data || []);
     } catch {
       setUsers([]);
       // silently fail
