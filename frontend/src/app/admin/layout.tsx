@@ -7,12 +7,15 @@ import { useAuthStore } from "@/store/useAuthStore";
 import {
   LayoutDashboard,
   Users,
+  UserCog,
   Package,
   ShoppingCart,
   Settings,
   LogOut,
   Bell,
   Search,
+  ClipboardList,
+  Headphones,
 } from "lucide-react";
 
 export default function AdminLayout({
@@ -25,23 +28,24 @@ export default function AdminLayout({
   const { user, isAuthenticated, loading } = useAuthStore();
 
   useEffect(() => {
-    // If not loading and not authenticated or not admin, redirect to login
-    // In a real app we'd wait for checkAuth to finish before redirecting to avoid flashing
-    if (!loading && (!isAuthenticated || user?.role !== "admin")) {
+    if (!loading && (!isAuthenticated || (user?.role !== "admin" && user?.role !== "supervisor"))) {
       router.push("/");
     }
   }, [isAuthenticated, user, loading, router]);
 
-  if (!isAuthenticated || user?.role !== "admin") {
-    return null; // Don't render until verified
+  if (!isAuthenticated || (user?.role !== "admin" && user?.role !== "supervisor")) {
+    return null;
   }
 
   const navItems = [
-    { label: "Overview", href: "/admin", icon: LayoutDashboard },
-    { label: "Affiliates", href: "/admin/affiliates", icon: Users },
-    { label: "Products", href: "/admin/products", icon: Package },
-    { label: "Orders", href: "/admin/orders", icon: ShoppingCart },
-    { label: "Settings", href: "/admin/settings", icon: Settings },
+    { label: "Overview",        href: "/admin",                icon: LayoutDashboard },
+    { label: "Users",           href: "/admin/users",          icon: UserCog },
+    { label: "Products",        href: "/admin/products",       icon: Package },
+    { label: "Stock Requests",  href: "/admin/stock-requests", icon: ClipboardList },
+    { label: "Support Tickets", href: "/admin/support",        icon: Headphones },
+    { label: "Orders",          href: "/admin/orders",         icon: ShoppingCart },
+    { label: "Affiliates",      href: "/admin/affiliates",     icon: Users },
+    { label: "Settings",        href: "/admin/settings",       icon: Settings },
   ];
 
   return (

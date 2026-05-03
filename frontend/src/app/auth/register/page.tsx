@@ -12,6 +12,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [role, setRole] = useState("CUSTOMER");
   const router = useRouter();
 
   const { register, loading, error: authError } = useAuthStore();
@@ -39,7 +40,7 @@ export default function RegisterPage() {
     }
 
     try {
-      await register({ firstName, lastName, email, password });
+      await register({ firstName, lastName, email, password, role });
       router.push("/");
     } catch (err) {
       // Error handled by store
@@ -116,6 +117,40 @@ export default function RegisterPage() {
                     placeholder="Last name"
                   />
                 </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-bold text-[#111] mb-1.5">
+                Account Type
+              </label>
+              <div className="flex gap-4">
+                <label className="flex-1 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="CUSTOMER"
+                    checked={role === "CUSTOMER"}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="peer sr-only"
+                  />
+                  <div className="border border-[#CCC] rounded-xl px-4 py-3 text-center text-sm font-medium text-[#555] peer-checked:border-[#FF9900] peer-checked:bg-[#FFF7EC] peer-checked:text-[#FF9900] transition-all">
+                    Customer
+                  </div>
+                </label>
+                <label className="flex-1 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="AFFILIATE"
+                    checked={role === "AFFILIATE"}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="peer sr-only"
+                  />
+                  <div className="border border-[#CCC] rounded-xl px-4 py-3 text-center text-sm font-medium text-[#555] peer-checked:border-[#FF9900] peer-checked:bg-[#FFF7EC] peer-checked:text-[#FF9900] transition-all">
+                    Affiliate
+                  </div>
+                </label>
               </div>
             </div>
 

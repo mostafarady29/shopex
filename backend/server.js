@@ -44,19 +44,23 @@ app.use('/api/', limiter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Modular Route files
-const authRoutes = require('./modules/auth/auth.routes');
-const affiliateRoutes = require('./modules/affiliate/affiliate.routes');
-const productRoutes = require('./modules/product/product.routes');
-const orderRoutes = require('./modules/order/order.routes');
-const adminRoutes = require('./modules/admin/admin.routes');
-const aiRoutes = require('./modules/ai/ai.routes');
+const authRoutes        = require('./modules/auth/auth.routes');
+const affiliateRoutes   = require('./modules/affiliate/affiliate.routes');
+const productRoutes     = require('./modules/product/product.routes');
+const orderRoutes       = require('./modules/order/order.routes');
+const adminRoutes       = require('./modules/admin/admin.routes');
+const aiRoutes          = require('./modules/ai/ai.routes');
+const stockCheckerRoutes = require('./modules/stock-checker/stock-checker.routes');
+const callCenterRoutes  = require('./modules/call-center/call-center.routes');
 
-app.use('/api/auth', authRoutes);
-app.use('/api/affiliate', affiliateRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/ai', aiRoutes);
+app.use('/api/auth',          authRoutes);
+app.use('/api/affiliate',     affiliateRoutes);
+app.use('/api/products',      productRoutes);
+app.use('/api/orders',        orderRoutes);
+app.use('/api/admin',         adminRoutes);
+app.use('/api/ai',            aiRoutes);
+app.use('/api/stock-checker', stockCheckerRoutes);
+app.use('/api/call-center',   callCenterRoutes);
 
 // File upload route
 const upload = require('./middleware/upload');

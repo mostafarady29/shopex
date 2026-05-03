@@ -20,7 +20,7 @@ interface AuthState {
   
   // Actions
   login: (credentials: { email: string; password: string }) => Promise<void>;
-  register: (data: { firstName: string; lastName: string; email: string; password: string; phone?: string }) => Promise<void>;
+  register: (data: { firstName: string; lastName: string; email: string; password: string; role?: string; phone?: string }) => Promise<void>;
   logout: () => void;
   checkAuth: () => Promise<void>;
   clearError: () => void;

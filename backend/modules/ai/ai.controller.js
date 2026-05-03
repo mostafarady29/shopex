@@ -14,6 +14,48 @@ exports.handleChat = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Message is required' });
         }
 
+        // ── Human escalation detection ─────────────────────────────────────────
+        const humanTriggers = [
+            'talk to human', 'speak to agent', 'real person', 'human agent',
+            'call center', 'customer service', 'live agent', 'speak to someone',
+            'connect me to', 'i want a human', 'talk to someone', 'بشري', 'موظف',
+            'شخص حقيقي', 'تكلم انسان'
+        ];
+        const lowerMsg = message.toLowerCase();
+        const wantsHuman = humanTriggers.some(t => lowerMsg.includes(t));
+
+        if (wantsHuman) {
+            try {
+                // Create a support ticket automatically
+                const ticket = await prisma.supportTicket.create({
+                    data: {
+                        userId: user.id,
+                        subject: `Chat escalation from ${user.firstName} ${user.lastName}`,
+                        status: 'open',
+                        messages: {
+                            create: {
+                                senderId: user.id,
+                                body: message,
+                                isAgent: false
+                            }
+                        }
+                    }
+                });
+                return res.json({
+                    success: true,
+                    data: {
+                        reply: `I've connected you with our support team. A customer service agent will be with you shortly. Your ticket ID is: **${ticket.id.substring(0, 8).toUpperCase()}**. You can also track your ticket status in your account.`,
+                        escalated: true,
+                        ticketId: ticket.id
+                    }
+                });
+            } catch (escalateErr) {
+                console.error("Escalation error:", escalateErr);
+                // Fall through to normal AI response if ticket creation fails
+            }
+        }
+        // ──────────────────────────────────────────────────────────────────────
+
         let systemContext = `You are the ShopEx AI Assistant. ShopEx is an e-commerce platform. You must be helpful, concise, and professional. The user's name is ${user.firstName} ${user.lastName} and their role is ${user.role}. `;
 
         // Build database context based on user role

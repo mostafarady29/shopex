@@ -30,6 +30,11 @@ model User {
   orders             Order[]
   reviews            Review[]
   affiliate          Affiliate?
+  stockRequestsMade  StockRequest[]  @relation("StockRequestedBy")
+  stockRequestsReviewed StockRequest[] @relation("StockReviewedBy")
+  supportTickets     SupportTicket[]
+  assignedTickets    SupportTicket[] @relation("TicketAssignedTo")
+  ticketMessages     TicketMessage[] @relation("TicketMessageSender")
 }
 
 model Affiliate {
@@ -67,8 +72,9 @@ model Product {
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 
-  orderItems   OrderItem[]
-  reviews      Review[]
+  orderItems     OrderItem[]
+  reviews        Review[]
+  stockRequests  StockRequest[]
 }
 
 model Order {
@@ -148,3 +154,47 @@ model Wallet {
   
   updatedAt        DateTime @updatedAt
 }
+
+// Stock Checker: pending requests awaiting supervisor/admin approval
+model StockRequest {
+  id            String   @id @default(uuid())
+  productId     String
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  requestedById String
+  requestedBy   User     @relation("StockRequestedBy", fields: [requestedById], references: [id])
+  type          String   // "add" | "remove"
+  quantity      Int
+  reason        String
+  status        String   @default("pending") // pending | approved | rejected
+  reviewedById  String?
+  reviewedBy    User?    @relation("StockReviewedBy", fields: [reviewedById], references: [id])
+  reviewNote    String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// Call Center: support tickets that may be escalated from AI chat
+model SupportTicket {
+  id            String           @id @default(uuid())
+  userId        String
+  user          User             @relation(fields: [userId], references: [id])
+  subject       String
+  status        String           @default("open") // open | assigned | resolved
+  assignedToId  String?
+  assignedTo    User?            @relation("TicketAssignedTo", fields: [assignedToId], references: [id])
+  messages      TicketMessage[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+}
+
+model TicketMessage {
+  id        String        @id @default(uuid())
+  ticketId  String
+  ticket    SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  senderId  String
+  sender    User          @relation("TicketMessageSender", fields: [senderId], references: [id])
+  body      String
+  isAgent   Boolean       @default(false) // true = call center agent, false = customer
+  createdAt DateTime      @default(now())
+}
+
