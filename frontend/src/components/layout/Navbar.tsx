@@ -23,9 +23,9 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { useCartStore } from "@/store/useCartStore";
 
 const categories = [
-  { label: "Electronics", icon: Laptop, href: "/products?category=electronics" },
-  { label: "Fashion",     icon: Shirt,  href: "/products?category=fashion" },
-  { label: "Home & Garden",  icon: HomeIcon, href: "/products?category=home" },
+  { label: "Electronics", icon: Laptop, href: "/products?category=Electronics" },
+  { label: "Men's Clothing", icon: Shirt,  href: "/products?category=Men's Clothing" },
+  { label: "Home & Kitchen",  icon: HomeIcon, href: "/products?category=Home & Kitchen" },
   { label: "Deals",       icon: Zap,    href: "/deals" },
   { label: "Orders",      icon: Package, href: "/orders" },
   { label: "Wishlist",    icon: Heart,  href: "/wishlist" },

@@ -56,12 +56,12 @@ const sections = [
 ];
 
 const categories = [
-  { label: "Electronics", image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&q=80", href: "/products?category=electronics" },
-  { label: "Fashion",     image: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&q=80", href: "/products?category=fashion" },
-  { label: "Home",        image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=400&q=80", href: "/products?category=home" },
-  { label: "Sports",      image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400&q=80", href: "/products?category=sports" },
-  { label: "Beauty",      image: "https://images.unsplash.com/photo-1596462502278-27bf85033e5a?w=400&q=80", href: "/products?category=beauty" },
-  { label: "Books",       image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&q=80", href: "/products?category=books" },
+  { label: "Electronics", image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&q=80", href: "/products?category=Electronics" },
+  { label: "Men's Clothing",     image: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&q=80", href: "/products?category=Men's Clothing" },
+  { label: "Home",        image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=400&q=80", href: "/products?category=Home & Kitchen" },
+  { label: "Sports",      image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400&q=80", href: "/products?category=Sports & Outdoors" },
+  { label: "Toys",      image: "https://images.unsplash.com/photo-1596462502278-27bf85033e5a?w=400&q=80", href: "/products?category=Toys & Games" },
+  { label: "Jewelry",       image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&q=80", href: "/products?category=Clothing, Shoes & Jewelry" },
 ];
 
 /* ── Product Card ─────────────────────────────────── */

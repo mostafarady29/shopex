@@ -38,7 +38,7 @@ const SORT_OPTIONS = [
   { label: "Avg. Customer Review", value: "rating" },
 ];
 
-const BRAND_OPTIONS = ["Sony", "Apple", "Bose", "Sennheiser", "Beats", "JBL", "Anker", "Samsung"];
+const BRAND_OPTIONS = ["Sony", "Apple", "Bose", "Samsung", "JBL", "Anker", "Nike", "Adidas"];
 
 const PRICE_RANGES = [
   { label: "Under $25", min: 0, max: 25 },
@@ -50,9 +50,13 @@ const PRICE_RANGES = [
 
 const CATEGORIES = [
   "Electronics",
-  "Fashion",
-  "Home & Garden",
-  "Audio & Headphones",
+  "Men's Clothing",
+  "Home & Kitchen",
+  "Toys & Games",
+  "Sports & Outdoors",
+  "Computers & Accessories",
+  "Clothing, Shoes & Jewelry",
+  "appliances",
 ];
 
 function ProductsContent() {

@@ -10,11 +10,11 @@ const footerLinks = [
   {
     title: "Shop",
     links: [
-      { label: "Electronics", href: "/products?category=electronics" },
-      { label: "Fashion", href: "/products?category=fashion" },
-      { label: "Home & Garden", href: "/products?category=home" },
-      { label: "Sports", href: "/products?category=sports" },
-      { label: "Beauty", href: "/products?category=beauty" },
+      { label: "Electronics", href: "/products?category=Electronics" },
+      { label: "Men's Clothing", href: "/products?category=Men's Clothing" },
+      { label: "Home & Kitchen", href: "/products?category=Home & Kitchen" },
+      { label: "Sports & Outdoors", href: "/products?category=Sports & Outdoors" },
+      { label: "Toys & Games", href: "/products?category=Toys & Games" },
       { label: "All Products", href: "/products" },
     ],
   },
