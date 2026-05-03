@@ -28,6 +28,11 @@ app.use('/api/chat', require('./routes/chat'));
 app.use('/api/cart', require('./routes/cart'));
 app.use('/api/wishlist', require('./routes/wishlist'));
 
+// Base API route
+app.get('/api', (req, res) => {
+    res.json({ success: true, message: 'Welcome to ShopEx API v1.0', docs: '/api/health' });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ success: true, message: 'SaaS Hub API is running', timestamp: new Date().toISOString() });
