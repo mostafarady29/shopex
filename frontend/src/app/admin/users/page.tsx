@@ -354,16 +354,16 @@ export default function UsersPage() {
                     <td className="py-4 px-6">
                       <div className="flex items-center gap-3">
                         <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#FF9900] to-[#FF6600] text-white flex items-center justify-center text-sm font-black flex-shrink-0">
-                          {u.firstName[0]}{u.lastName[0]}
+                          {(u.firstName?.[0] || "U").toUpperCase()}{(u.lastName?.[0] || "").toUpperCase()}
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-[#111]">{u.firstName} {u.lastName}</p>
+                          <p className="text-sm font-bold text-[#111]">{u.firstName || "Unknown"} {u.lastName || ""}</p>
                           <p className="text-xs text-[#888]">{u.email}</p>
                         </div>
                       </div>
                     </td>
                     <td className="py-4 px-6">{roleBadge(u.role)}</td>
-                    <td className="py-4 px-6 text-sm font-bold text-[#111]">{u.orders.length}</td>
+                    <td className="py-4 px-6 text-sm font-bold text-[#111]">{u.orders?.length || 0}</td>
                     <td className="py-4 px-6">
                       {u.affiliate ? (
                         <span className="text-xs font-mono bg-[#F5F5F7] px-2 py-1 rounded-lg text-[#555]">
