@@ -104,7 +104,7 @@ export default function ProductDetailPage() {
     const fetchProduct = async () => {
       try {
         const res = await api.get(`/products/${id}`);
-        setProduct(res.data.data);
+        setProduct(res.data.product);
       } catch (err: any) {
         setError("Product not found or failed to load.");
       } finally {

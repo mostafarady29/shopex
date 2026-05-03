@@ -12,7 +12,11 @@ import {
   ChevronRight,
   Star,
   TrendingUp,
+  TrendingUp,
 } from "lucide-react";
+import api from "@/lib/axios";
+import { useCartStore } from "@/store/useCartStore";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const trustBadges = [
   { icon: Truck,        text: "Free Delivery",    sub: "On orders over $35" },
@@ -31,6 +35,27 @@ const fadeUp: any = {
 };
 
 export const Hero = () => {
+  const [product, setProduct] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState(true);
+  const { addToCart } = useCartStore();
+  const { isAuthenticated } = useAuthStore();
+
+  React.useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await api.get('/products?limit=1');
+        if (res.data.products && res.data.products.length > 0) {
+          setProduct(res.data.products[0]);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, []);
+
   return (
     <section className="relative overflow-hidden bg-[#FAFAFA]">
       {/* Subtle background gradient */}
@@ -123,9 +148,21 @@ export const Hero = () => {
             animate="visible"
             className="flex-1 w-full max-w-lg"
           >
-            {/* Trending product card */}
-            <div className="relative bg-white rounded-3xl shadow-xl overflow-hidden border border-[#F0F0F0] p-6">
-              <div className="flex items-center gap-2 mb-4">
+              {/* Trending product card */}
+              <div className="relative bg-white rounded-3xl shadow-xl overflow-hidden border border-[#F0F0F0] p-6 min-h-[350px]">
+                <div className="flex items-center gap-2 mb-4">
+                  <TrendingUp className="w-4 h-4 text-[#FF9900]" />
+                  <span className="text-xs font-bold text-[#FF9900] uppercase tracking-wider">
+                    Trending Today
+                  </span>
+                </div>
+                
+                {loading ? (
+                  <div className="flex items-center justify-center h-48">
+                    <div className="w-8 h-8 border-4 border-[#FF9900] border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                ) : product ? (
+                  <>
                 <TrendingUp className="w-4 h-4 text-[#FF9900]" />
                 <span className="text-xs font-bold text-[#FF9900] uppercase tracking-wider">
                   Trending Today
@@ -133,30 +170,48 @@ export const Hero = () => {
               </div>
 
               {/* Product preview */}
-              <div className="bg-[#F7F7F7] rounded-2xl aspect-video mb-5 flex items-center justify-center overflow-hidden relative">
-                <div className="text-8xl select-none">🎧</div>
-                <span className="absolute top-3 left-3 badge badge-deal">-40%</span>
-                <span className="absolute top-3 right-3 badge badge-prime">Prime</span>
-              </div>
+              <Link href={`/products/${product.id}`} className="block">
+                <div className="bg-[#F7F7F7] rounded-2xl aspect-video mb-5 flex items-center justify-center overflow-hidden relative group">
+                  {product.images && product.images.length > 0 ? (
+                    <img src={product.images[0]} alt={product.name} className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform" />
+                  ) : (
+                    <div className="text-8xl select-none group-hover:scale-105 transition-transform">🎧</div>
+                  )}
+                  {product.comparePrice > product.price && (
+                    <span className="absolute top-3 left-3 badge badge-deal">-{Math.round((1 - product.price / product.comparePrice) * 100)}%</span>
+                  )}
+                  {product.featured && (
+                    <span className="absolute top-3 right-3 badge badge-prime">Prime</span>
+                  )}
+                </div>
 
-              <h3 className="font-bold text-[#111] text-lg mb-1">
-                Sony WH-1000XM5 Headphones
-              </h3>
+                <h3 className="font-bold text-[#111] text-lg mb-1 line-clamp-1 group-hover:text-[#FF9900] transition-colors">
+                  {product.name}
+                </h3>
+              </Link>
               <div className="flex items-center gap-2 mb-3">
                 <div className="flex text-[#FF9900]">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                    <Star key={i} className={`w-3.5 h-3.5 ${i < Math.floor(product.rating) ? "fill-current" : "fill-current opacity-25"}`} />
                   ))}
                 </div>
-                <span className="text-xs text-[#888]">(4,218)</span>
+                <span className="text-xs text-[#888]">({product.reviewCount || 0})</span>
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-2xl font-black text-[#111]">$279</span>
-                  <span className="text-sm text-[#888] line-through ml-2">$399</span>
+                  <span className="text-2xl font-black text-[#111]">${Math.floor(product.price)}</span>
+                  {product.comparePrice > product.price && (
+                    <span className="text-sm text-[#888] line-through ml-2">${product.comparePrice}</span>
+                  )}
                 </div>
-                <button className="bg-[#FF9900] hover:bg-[#E68A00] text-[#111] font-bold text-sm px-5 py-2.5 rounded-xl transition-colors active:scale-95">
+                <button 
+                  onClick={async () => {
+                    if (!isAuthenticated) { alert('Please sign in to add items to cart.'); return; }
+                    try { await addToCart(product.id); alert('Added to cart!'); } catch { alert('Failed to add to cart.'); }
+                  }}
+                  className="bg-[#FF9900] hover:bg-[#E68A00] text-[#111] font-bold text-sm px-5 py-2.5 rounded-xl transition-colors active:scale-95"
+                >
                   Add to Cart
                 </button>
               </div>
@@ -166,6 +221,10 @@ export const Hero = () => {
                 <Truck className="w-3.5 h-3.5" />
                 Get it by Tomorrow — order within 4 hrs
               </p>
+                  </>
+                ) : (
+                  <p className="text-sm text-[#888]">No trending products found.</p>
+                )}
             </div>
 
             {/* Floating mini cards */}

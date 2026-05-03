@@ -15,53 +15,20 @@ import {
   Eye,
 } from "lucide-react";
 
-/* ── Mock product data ─────────────────────────────── */
-const sections = [
-  {
-    id: "trending",
-    icon: TrendingUp,
-    label: "Trending Near You",
-    color: "#FF9900",
-    products: [
-      { id: 1, name: "AirPods Pro (3rd Gen)",    price: 219,  originalPrice: 249,  rating: 4.9, reviews: 12480, image: "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=400&q=80", badge: "Prime",  discount: 12 },
-      { id: 2, name: "Nike Air Max 270",          price: 89,   originalPrice: 130,  rating: 4.7, reviews: 3204,  image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80", badge: "Deal",   discount: 31 },
-      { id: 3, name: "Kindle Paperwhite",         price: 99,   originalPrice: 139,  rating: 4.8, reviews: 8914,  image: "https://images.unsplash.com/photo-1592496001020-d31bd830651f?w=400&q=80", badge: "Prime",  discount: 28 },
-      { id: 4, name: "Instant Pot Duo 7-in-1",   price: 79,   originalPrice: 100,  rating: 4.7, reviews: 21036, image: "https://images.unsplash.com/photo-1584269600464-37b1b58a9fe7?w=400&q=80", badge: "Deal",   discount: 21 },
-    ],
-  },
-  {
-    id: "behavior",
-    icon: Brain,
-    label: "Based on Your Browsing",
-    color: "#007185",
-    products: [
-      { id: 5, name: "MacBook Pro 16\" M3 Pro",  price: 2399, originalPrice: 2799, rating: 4.9, reviews: 2341,  image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80", badge: "Prime",  discount: 14 },
-      { id: 6, name: "Samsung 4K Smart TV 55\"", price: 449,  originalPrice: 599,  rating: 4.6, reviews: 5677,  image: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=400&q=80", badge: "Deal",   discount: 25 },
-      { id: 7, name: "Mechanical Keyboard TKL",  price: 129,  originalPrice: 169,  rating: 4.8, reviews: 4102,  image: "https://images.unsplash.com/photo-1595225476474-87563907a212?w=400&q=80", badge: null,     discount: 23 },
-      { id: 8, name: "Logitech MX Master 3S",    price: 89,   originalPrice: 109,  rating: 4.8, reviews: 6230,  image: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&q=80", badge: "Prime",  discount: 18 },
-    ],
-  },
-  {
-    id: "value",
-    icon: Zap,
-    label: "Best Value Picks",
-    color: "#00A650",
-    products: [
-      { id: 9,  name: "Anker 65W Charger",        price: 25,   originalPrice: 40,   rating: 4.7, reviews: 18420, image: "https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=400&q=80", badge: null,     discount: 37 },
-      { id: 10, name: "Reusable Water Bottle",    price: 18,   originalPrice: 35,   rating: 4.8, reviews: 9234,  image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&q=80", badge: "Deal",   discount: 48 },
-      { id: 11, name: "Cable Organizer Set",      price: 12,   originalPrice: 20,   rating: 4.5, reviews: 7110,  image: "https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=400&q=80", badge: null,     discount: 40 },
-      { id: 12, name: "Phone Stand Adjustable",   price: 15,   originalPrice: 22,   rating: 4.6, reviews: 5234,  image: "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=400&q=80", badge: null,     discount: 31 },
-    ],
-  },
+/* ── Mock section definitions (without products) ──────── */
+const sectionDefs = [
+  { id: "trending", icon: TrendingUp, label: "Trending Near You", color: "#FF9900" },
+  { id: "behavior", icon: Brain, label: "Based on Your Browsing", color: "#007185" },
+  { id: "value", icon: Zap, label: "Best Value Picks", color: "#00A650" },
 ];
 
 const categories = [
   { label: "Electronics", image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&q=80", href: "/products?category=Electronics" },
-  { label: "Men's Clothing",     image: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&q=80", href: "/products?category=Men's Clothing" },
-  { label: "Home",        image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=400&q=80", href: "/products?category=Home & Kitchen" },
-  { label: "Sports",      image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400&q=80", href: "/products?category=Sports & Outdoors" },
-  { label: "Toys",      image: "https://images.unsplash.com/photo-1596462502278-27bf85033e5a?w=400&q=80", href: "/products?category=Toys & Games" },
-  { label: "Jewelry",       image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&q=80", href: "/products?category=Clothing, Shoes & Jewelry" },
+  { label: "Men's Clothing", image: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&q=80", href: "/products?category=Men's Clothing" },
+  { label: "Home", image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=400&q=80", href: "/products?category=Home & Kitchen" },
+  { label: "Sports", image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400&q=80", href: "/products?category=Sports & Outdoors" },
+  { label: "Toys", image: "https://images.unsplash.com/photo-1596462502278-27bf85033e5a?w=400&q=80", href: "/products?category=Toys & Games" },
+  { label: "Jewelry", image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&q=80", href: "/products?category=Clothing, Shoes & Jewelry" },
 ];
 
 /* ── Product Card ─────────────────────────────────── */
@@ -108,9 +75,11 @@ const ProductCard = ({ product }: { product: Product }) => {
           </div>
 
           {/* Discount badge */}
-          <div className="absolute top-3 right-3 bg-[#CC0C39] text-white text-xs font-black px-2 py-0.5 rounded-lg">
-            -{product.discount}%
-          </div>
+          {product.discount > 0 && (
+            <div className="absolute top-3 right-3 bg-[#CC0C39] text-white text-xs font-black px-2 py-0.5 rounded-lg">
+              -{product.discount}%
+            </div>
+          )}
 
           {/* Hover overlay actions */}
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-200 flex items-end justify-center pb-3 gap-2 opacity-0 group-hover:opacity-100">
@@ -161,9 +130,11 @@ const ProductCard = ({ product }: { product: Product }) => {
             <span className="text-lg font-black text-[#111]">
               ${product.price}
             </span>
-            <span className="text-xs text-[#888] line-through">
-              ${product.originalPrice}
-            </span>
+            {product.originalPrice > product.price && (
+              <span className="text-xs text-[#888] line-through">
+                ${product.originalPrice}
+              </span>
+            )}
           </div>
 
           {/* Add to Cart */}
@@ -189,7 +160,7 @@ const RecommendationSection = ({
   section,
   index,
 }: {
-  section: (typeof sections)[0];
+  section: any;
   index: number;
 }) => {
   const Icon = section.icon;
@@ -223,7 +194,7 @@ const RecommendationSection = ({
 
       {/* Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        {section.products.map((product) => (
+        {section.products.map((product: any) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
@@ -231,8 +202,44 @@ const RecommendationSection = ({
   );
 };
 
+import api from "@/lib/axios";
+
 /* ── Main Export ──────────────────────────────────── */
 export const BentoGrid = () => {
+  const [sections, setSections] = useState<any[]>([]);
+
+  React.useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await api.get("/products?limit=12");
+        const products = res.data.products || [];
+        
+        // Map DB products to ProductCard shape
+        const mappedProducts = products.map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          price: Math.floor(p.price),
+          originalPrice: p.comparePrice > p.price ? Math.floor(p.comparePrice) : Math.floor(p.price),
+          rating: p.rating || 4.5,
+          reviews: p.reviewCount || 0,
+          image: p.images && p.images.length > 0 ? p.images[0] : "📦",
+          badge: p.featured ? "Prime" : null,
+          discount: p.comparePrice > p.price ? Math.round((1 - p.price / p.comparePrice) * 100) : 0,
+        }));
+
+        // Split into 3 sections (up to 4 products each)
+        const newSections = sectionDefs.map((def, i) => ({
+          ...def,
+          products: mappedProducts.slice(i * 4, i * 4 + 4),
+        })).filter(sec => sec.products.length > 0);
+
+        setSections(newSections);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchProducts();
+  }, []);
   return (
     <section className="bg-[#F7F7F7] py-12">
       <div className="mx-auto max-w-[1400px] px-4">
