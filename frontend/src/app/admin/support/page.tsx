@@ -251,7 +251,7 @@ export default function SupportTicketsPage() {
                 onClick={() => setActive(ticket)}>
                 <div className="flex items-center gap-4 min-w-0">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#6366F1] to-[#4F46E5] text-white flex items-center justify-center text-sm font-black flex-shrink-0">
-                    {ticket.user.firstName[0]}{ticket.user.lastName[0]}
+                    {(ticket.user?.firstName?.[0] || "U").toUpperCase()}{(ticket.user?.lastName?.[0] || "").toUpperCase()}
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
