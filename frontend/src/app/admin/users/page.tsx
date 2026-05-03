@@ -245,8 +245,9 @@ export default function UsersPage() {
       if (search)     params.search = search;
       if (roleFilter) params.role   = roleFilter;
       const res = await api.get("/admin/users", { params });
-      setUsers(res.data.data);
+      setUsers(res.data?.data || []);
     } catch {
+      setUsers([]);
       // silently fail
     } finally {
       setLoading(false);
@@ -313,7 +314,7 @@ export default function UsersPage() {
       {!loading && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {["customer", "affiliate", "supervisor", "admin"].map(role => {
-            const count = users.filter(u => u.role === role).length;
+            const count = (users || []).filter(u => u.role === role).length;
             return (
               <div key={role} className="bg-white rounded-2xl border border-[#E5E5E5] p-4 shadow-sm">
                 <p className="text-xs font-bold text-[#888] uppercase tracking-wider mb-1">{role}s</p>
