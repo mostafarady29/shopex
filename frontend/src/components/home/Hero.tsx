@@ -110,12 +110,16 @@ export const Hero = () => {
               animate="visible"
               className="flex flex-wrap gap-3"
             >
-              <Button size="lg" variant="primary" className="rounded-full font-bold px-8">
-                Shop Now
-              </Button>
-              <Button size="lg" variant="ghost" className="rounded-full gap-2 text-[#555]">
-                See today&apos;s deals <ChevronRight className="w-4 h-4" />
-              </Button>
+              <Link href="/products">
+                <Button size="lg" variant="primary" className="rounded-full font-bold px-8">
+                  Shop Now
+                </Button>
+              </Link>
+              <Link href="/products?sort=discount">
+                <Button size="lg" variant="ghost" className="rounded-full gap-2 text-[#555]">
+                  See today&apos;s deals <ChevronRight className="w-4 h-4" />
+                </Button>
+              </Link>
             </motion.div>
 
             {/* Stats */}
