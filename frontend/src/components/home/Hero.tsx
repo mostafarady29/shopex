@@ -61,7 +61,7 @@ export const Hero = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-[#FFF7EC] via-[#FAFAFA] to-[#FAFAFA] pointer-events-none" />
 
       <div className="relative mx-auto max-w-[1400px] px-4 pt-12 pb-16 md:pt-16 md:pb-20">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center gap-12 lg:gap-16">
 
           {/* ── Left: Copy ────────────────────────────── */}
           <div className="flex-1 w-full max-w-xl">
@@ -124,7 +124,7 @@ export const Hero = () => {
               variants={fadeUp}
               initial="hidden"
               animate="visible"
-              className="mt-10 flex items-center gap-8 pt-8 border-t border-[#EEEEEE]"
+              className="mt-10 flex flex-wrap items-center gap-4 sm:gap-8 pt-8 border-t border-[#EEEEEE]"
             >
               {[
                 { value: "10M+",  label: "Products" },
