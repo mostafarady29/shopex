@@ -5,10 +5,15 @@ const path = require('path');
 const fs = require('fs');
 const { protect } = require('../middleware/auth');
 
-// Ensure upload directory exists
-const uploadDir = path.join(__dirname, '../../frontend/public/uploads');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
+// Ensure upload directory exists (Catch errors for Vercel Read-Only file system)
+const uploadDir = process.env.VERCEL === '1' ? '/tmp/uploads' : path.join(__dirname, '../../frontend/public/uploads');
+
+try {
+    if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+    }
+} catch (err) {
+    console.warn('Could not create upload directory (expected on Vercel):', err.message);
 }
 
 // Configure multer storage
