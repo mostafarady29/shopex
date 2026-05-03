@@ -209,7 +209,7 @@ export default function Chatbot() {
       {/* ── Toggle Button ──────────────────────────────────────── */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-6 right-6 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-105 z-50 ${
+        className={`fixed bottom-20 md:bottom-6 right-4 md:right-6 w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform transform hover:scale-105 z-50 ${
           isOpen ? "bg-[#111] text-white rotate-90" : "bg-[#111] text-white"
         }`}
       >
@@ -218,7 +218,7 @@ export default function Chatbot() {
 
       {/* ── Chat Window ────────────────────────────────────────── */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-[360px] h-[500px] bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[#E5E5E5] flex flex-col z-50 animate-in slide-in-from-bottom-5 fade-in duration-200 overflow-hidden">
+        <div className="fixed bottom-36 md:bottom-24 right-4 md:right-6 w-[calc(100vw-2rem)] sm:w-[360px] h-[500px] max-h-[80vh] bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-[#E5E5E5] flex flex-col z-50 animate-in slide-in-from-bottom-5 fade-in duration-200 overflow-hidden">
           
           {/* Header */}
           <div className="bg-[#111] p-4 flex items-center gap-3 text-white">
