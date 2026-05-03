@@ -163,11 +163,6 @@ export const Hero = () => {
                   </div>
                 ) : product ? (
                   <>
-                <TrendingUp className="w-4 h-4 text-[#FF9900]" />
-                <span className="text-xs font-bold text-[#FF9900] uppercase tracking-wider">
-                  Trending Today
-                </span>
-              </div>
 
               {/* Product preview */}
               <Link href={`/products/${product.id}`} className="block">
