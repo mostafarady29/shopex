@@ -48,7 +48,7 @@ export default function RootLayout({
       dir="ltr"
       className={`${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans bg-white text-[#111111]">
+      <body className="min-h-full flex flex-col font-sans bg-white text-[#111111] overflow-x-hidden">
         {children}
         <Chatbot />
       </body>
