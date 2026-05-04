@@ -34,6 +34,44 @@ export const MobileNav = () => {
       <div className="flex items-center justify-around h-16 px-2">
         {navItems.map(({ label, icon: Icon, href, badge }) => {
           const active = pathname === href;
+
+          if (label === "Search") {
+            return (
+              <button
+                key={label}
+                onClick={() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  setTimeout(() => {
+                    document.querySelector<HTMLInputElement>("#navbar-search input")?.focus();
+                  }, 100);
+                }}
+                className={cn(
+                  "relative flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-all duration-150 min-w-[56px]",
+                  active ? "text-[#FF9900]" : "text-[#888] hover:text-[#111]"
+                )}
+                aria-label={label}
+              >
+                <div className="relative">
+                  <Icon
+                    className={cn(
+                      "w-5 h-5 transition-transform duration-150",
+                      active && "scale-110"
+                    )}
+                    strokeWidth={active ? 2.5 : 1.75}
+                  />
+                </div>
+                <span
+                  className={cn(
+                    "text-[10px] font-semibold transition-all duration-150",
+                    active ? "opacity-100" : "opacity-70"
+                  )}
+                >
+                  {label}
+                </span>
+              </button>
+            );
+          }
+
           return (
             <Link
               key={label}
