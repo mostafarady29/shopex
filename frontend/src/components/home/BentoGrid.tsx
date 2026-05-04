@@ -14,6 +14,8 @@ import {
   Heart,
   Eye,
 } from "lucide-react";
+import { useCartStore } from "@/store/useCartStore";
+import { useAuthStore } from "@/store/useAuthStore";
 
 /* ── Mock section definitions (without products) ──────── */
 const sectionDefs = [
@@ -47,11 +49,22 @@ interface Product {
 const ProductCard = ({ product }: { product: Product }) => {
   const [liked, setLiked] = useState(false);
   const [added, setAdded] = useState(false);
+  const { addToCart } = useCartStore();
+  const { isAuthenticated } = useAuthStore();
 
-  const handleAdd = (e: React.MouseEvent) => {
+  const handleAdd = async (e: React.MouseEvent) => {
     e.preventDefault();
-    setAdded(true);
-    setTimeout(() => setAdded(false), 1500);
+    if (!isAuthenticated) {
+      alert("Please sign in to add items to cart.");
+      return;
+    }
+    try {
+      await addToCart(product.id.toString());
+      setAdded(true);
+      setTimeout(() => setAdded(false), 2000);
+    } catch (err) {
+      alert("Failed to add to cart.");
+    }
   };
 
   return (
