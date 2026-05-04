@@ -45,6 +45,7 @@ export const Navbar = () => {
   const [focused, setFocused] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -54,6 +55,42 @@ export const Navbar = () => {
       router.push(`/products?search=${encodeURIComponent(query.trim())}`);
       setFocused(false);
     }
+  };
+
+  const handleVoiceSearch = () => {
+    // @ts-ignore
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Voice search is not supported in your browser.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event: any) => {
+      const speechResult = event.results[0][0].transcript;
+      setQuery(speechResult);
+      router.push(`/products?search=${encodeURIComponent(speechResult)}`);
+      setFocused(false);
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error("Speech recognition error", event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
   };
 
   // Shadow on scroll
@@ -142,6 +179,7 @@ export const Navbar = () => {
               />
               {query && (
                 <button
+                  type="button"
                   onClick={() => setQuery("")}
                   className="mr-1 p-1 rounded-lg hover:bg-[#F0F0F0] transition-colors"
                   aria-label="Clear search"
@@ -150,12 +188,17 @@ export const Navbar = () => {
                 </button>
               )}
               <button
-                className="mr-1 p-1.5 rounded-lg hover:bg-[#F0F0F0] transition-colors"
+                type="button"
+                onClick={handleVoiceSearch}
+                className={`mr-1 p-1.5 rounded-lg transition-colors ${
+                  isListening ? "bg-[#FF9900]/20 animate-pulse" : "hover:bg-[#F0F0F0]"
+                }`}
                 aria-label="Voice search"
               >
-                <Mic className="w-4 h-4 text-[#888]" />
+                <Mic className={`w-4 h-4 ${isListening ? "text-[#FF9900]" : "text-[#888]"}`} />
               </button>
               <button
+                type="submit"
                 className="bg-[#FF9900] hover:bg-[#E68A00] text-[#111] rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors duration-150 mr-1"
                 aria-label="Search"
               >
