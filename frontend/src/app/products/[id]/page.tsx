@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Navbar }   from "@/components/layout/Navbar";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { Button }   from "@/components/ui/Button";
@@ -85,6 +85,7 @@ const Collapsible = ({ title, children, defaultOpen = false }: { title: string; 
 /* ── Main Page ─────────────────────────────────────── */
 export default function ProductDetailPage() {
   const params = useParams();
+  const router = useRouter();
   const id = params.id as string;
   
   const [product, setProduct] = useState<any>(null);
