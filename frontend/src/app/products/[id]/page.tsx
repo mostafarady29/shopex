@@ -150,6 +150,36 @@ export default function ProductDetailPage() {
     }
   };
 
+  const handleBuyNow = async () => {
+    if (!isAuthenticated) {
+      alert("Please sign in to buy items.");
+      return;
+    }
+    try {
+      await addToCart(product.id, qty);
+      router.push("/cart");
+    } catch {
+      alert("Failed to proceed to checkout.");
+    }
+  };
+
+  const handleShare = async () => {
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: product.name,
+          text: product.description,
+          url: window.location.href,
+        });
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        alert("Link copied to clipboard!");
+      }
+    } catch (err) {
+      console.error("Error sharing", err);
+    }
+  };
+
   if (loading) {
     return (
       <main className="min-h-screen bg-[#F7F7F7]">
@@ -269,6 +299,7 @@ export default function ProductDetailPage() {
                   <Heart className={`w-4 h-4 ${liked ? "fill-current" : ""}`} />
                 </button>
                 <button
+                  onClick={handleShare}
                   className="w-9 h-9 rounded-xl bg-white shadow-sm text-[#888] hover:text-[#111] flex items-center justify-center transition-colors"
                   aria-label="Share"
                 >
@@ -458,8 +489,11 @@ export default function ProductDetailPage() {
                   )}
                 </button>
 
-                <button className="w-full py-3.5 rounded-2xl bg-[#111111] hover:bg-[#222] text-white font-bold text-sm transition-colors active:scale-95 flex items-center justify-center gap-2">
-                  <Zap className="w-4 h-4 text-[#FF9900]" />
+                <button
+                  onClick={handleBuyNow}
+                  className="w-full py-3.5 rounded-2xl font-bold text-sm bg-[#111] hover:bg-black text-white flex items-center justify-center gap-2 active:scale-95 transition-all"
+                >
+                  <Zap className="w-4 h-4 text-[#FF9900]" fill="currentColor" />
                   Buy Now
                 </button>
               </div>
