@@ -27,6 +27,7 @@ app.use('/api/affiliate', require('./routes/affiliate'));
 app.use('/api/chat', require('./routes/chat'));
 app.use('/api/cart', require('./routes/cart'));
 app.use('/api/wishlist', require('./routes/wishlist'));
+app.use('/api/stock-checker', require('./routes/stock-checker'));
 
 // Base API route
 app.get('/api', (req, res) => {
