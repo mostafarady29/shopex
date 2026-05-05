@@ -38,26 +38,7 @@ const SORT_OPTIONS = [
   { label: "Avg. Customer Review", value: "rating" },
 ];
 
-const BRAND_OPTIONS = ["Sony", "Apple", "Bose", "Samsung", "JBL", "Anker", "Nike", "Adidas"];
 
-const PRICE_RANGES = [
-  { label: "Under $25", min: 0, max: 25 },
-  { label: "$25 to $50", min: 25, max: 50 },
-  { label: "$50 to $100", min: 50, max: 100 },
-  { label: "$100 to $200", min: 100, max: 200 },
-  { label: "$200 & Above", min: 200, max: undefined },
-];
-
-const CATEGORIES = [
-  "Electronics",
-  "Men's Clothing",
-  "Home & Kitchen",
-  "Toys & Games",
-  "Sports & Outdoors",
-  "Computers & Accessories",
-  "Clothing, Shoes & Jewelry",
-  "appliances",
-];
 
 function ProductsContent() {
   const router = useRouter();
@@ -68,8 +49,19 @@ function ProductsContent() {
   const [pagination, setPagination] = useState<Pagination>({ page: 1, limit: 12, total: 0, pages: 0 });
   const [loading, setLoading] = useState(true);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [dynamicCategories, setDynamicCategories] = useState<string[]>([]);
+  const [dynamicBrands, setDynamicBrands] = useState<string[]>([]);
+  
   const { addToCart } = useCartStore();
   const { isAuthenticated } = useAuthStore();
+
+  const PRICE_RANGES = [
+    { label: "Under $25", min: 0, max: 25 },
+    { label: "$25 to $50", min: 25, max: 50 },
+    { label: "$50 to $100", min: 50, max: 100 },
+    { label: "$100 to $200", min: 100, max: 200 },
+    { label: "$200 & Above", min: 200, max: undefined },
+  ];
 
   // Filters from URL
   const currentCategory = searchParams.get("category") || "";
@@ -102,6 +94,20 @@ function ProductsContent() {
     router.push(`/products?${params.toString()}`);
   }, [searchParams, router]);
 
+  // Fetch filter options
+  useEffect(() => {
+    const fetchFilters = async () => {
+      try {
+        const res = await api.get("/products/filters");
+        setDynamicCategories(res.data.categories || []);
+        setDynamicBrands(res.data.brands || []);
+      } catch (err) {
+        console.error("Failed to fetch filters", err);
+      }
+    };
+    fetchFilters();
+  }, []);
+
   // Fetch products from API
   useEffect(() => {
     const fetchProducts = async () => {
@@ -114,14 +120,10 @@ function ProductsContent() {
         if (currentBrands.length > 0) params.brand = currentBrands.join(",");
         if (currentMinPrice) params.minPrice = currentMinPrice;
         if (currentMaxPrice) params.maxPrice = currentMaxPrice;
+        if (currentMinRating > 0) params.minRating = String(currentMinRating);
 
         const res = await api.get("/products", { params });
-        let fetchedProducts = res.data.products || [];
-
-        // Client-side rating filter (since backend doesn't support it)
-        if (currentMinRating > 0) {
-          fetchedProducts = fetchedProducts.filter((p: Product) => p.rating >= currentMinRating);
-        }
+        const fetchedProducts = res.data.products || [];
 
         setProducts(fetchedProducts);
         setPagination(res.data.pagination || { page: 1, limit: 12, total: 0, pages: 0 });
@@ -214,7 +216,7 @@ function ProductsContent() {
       <div>
         <h3 className="font-bold text-[#111] mb-2">Category</h3>
         <ul className="space-y-1.5 text-sm text-[#333]">
-          {CATEGORIES.map((cat) => (
+          {dynamicCategories.map((cat) => (
             <li key={cat}>
               <button
                 onClick={() => updateFilters({ category: currentCategory === cat ? undefined : cat })}
@@ -231,7 +233,7 @@ function ProductsContent() {
       <div>
         <h3 className="font-bold text-[#111] mb-2">Featured Brands</h3>
         <ul className="space-y-2 text-sm text-[#333]">
-          {BRAND_OPTIONS.map((brand) => (
+          {dynamicBrands.map((brand) => (
             <li key={brand}>
               <label className="flex items-center gap-2 cursor-pointer group">
                 <input

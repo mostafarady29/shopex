@@ -6,7 +6,7 @@ const { protect, authorize } = require('../middleware/auth');
 // GET /api/products - Get all products with filters
 router.get('/', async (req, res, next) => {
     try {
-        const { category, brand, search, sort, minPrice, maxPrice, featured, page = 1, limit = 12 } = req.query;
+        const { category, brand, search, sort, minPrice, maxPrice, minRating, featured, page = 1, limit = 12 } = req.query;
 
         const where = { status: 'active' };
         if (category) where.category = { contains: category, mode: 'insensitive' };
@@ -18,6 +18,7 @@ router.get('/', async (req, res, next) => {
             if (minPrice) where.price.gte = Number(minPrice);
             if (maxPrice) where.price.lte = Number(maxPrice);
         }
+        if (minRating) where.rating = { gte: Number(minRating) };
 
         let orderBy = {};
         if (sort === 'price-low') orderBy = { price: 'asc' };
@@ -42,6 +43,38 @@ router.get('/', async (req, res, next) => {
                 total,
                 pages: Math.ceil(total / Number(limit))
             }
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+// GET /api/products/filters - Get dynamic categories and popular brands
+router.get('/filters', async (req, res, next) => {
+    try {
+        // Fetch distinct categories
+        const categoriesResult = await prisma.product.findMany({
+            where: { status: 'active' },
+            select: { category: true },
+            distinct: ['category'],
+        });
+        const categories = categoriesResult.map(c => c.category).filter(Boolean);
+
+        // Fetch distinct brands (only valid ones)
+        const brandsResult = await prisma.product.findMany({
+            where: { 
+                status: 'active',
+                brand: { not: null, notIn: [''] }
+            },
+            select: { brand: true },
+            distinct: ['brand'],
+        });
+        const brands = brandsResult.map(b => b.brand).filter(Boolean);
+
+        res.json({
+            success: true,
+            categories,
+            brands
         });
     } catch (err) {
         next(err);
