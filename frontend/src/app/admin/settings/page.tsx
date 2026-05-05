@@ -130,13 +130,165 @@ export default function AdminSettingsPage() {
             </div>
           )}
 
-          {(activeTab === "payments" || activeTab === "notifications" || activeTab === "security") && (
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-              <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                <Globe className="w-6 h-6 text-gray-400" />
+          {activeTab === "payments" && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-medium text-gray-900">Payment Gateways</h3>
+                <p className="text-sm text-gray-500 mb-4">Configure your payment processors to accept customer payments.</p>
+                <div className="grid gap-4">
+                  <div className="p-5 border border-gray-200 rounded-xl bg-white shadow-sm">
+                    <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-4">
+                      <div>
+                        <h4 className="font-semibold text-gray-900 text-base">Stripe Integration</h4>
+                        <p className="text-sm text-gray-500 mt-1">Accept credit cards, Apple Pay, and Google Pay.</p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" className="sr-only peer" defaultChecked />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
+                      </label>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Publishable Key</label>
+                        <input type="text" placeholder="pk_test_..." defaultValue="pk_test_51O..." className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all font-mono text-sm" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Secret Key</label>
+                        <input type="password" placeholder="sk_test_..." defaultValue="sk_test_51O..." className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all font-mono text-sm" />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="p-5 border border-gray-200 rounded-xl bg-gray-50/50">
+                    <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-4">
+                      <div>
+                        <h4 className="font-semibold text-gray-900 text-base">PayPal</h4>
+                        <p className="text-sm text-gray-500 mt-1">Accept PayPal and Venmo payments.</p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" className="sr-only peer" />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
+                      </label>
+                    </div>
+                    <div className="space-y-4 opacity-50 pointer-events-none">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Client ID</label>
+                        <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all font-mono text-sm" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <h3 className="text-lg font-medium text-gray-900">Coming Soon</h3>
-              <p className="text-gray-500 mt-2 max-w-sm">This settings module is currently under development and will be available in the next release.</p>
+            </div>
+          )}
+
+          {activeTab === "notifications" && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-medium text-gray-900">Admin Notifications</h3>
+                <p className="text-sm text-gray-500 mb-4">Select which events trigger email notifications to administrators.</p>
+                
+                <div className="border border-gray-200 rounded-xl divide-y divide-gray-100">
+                  <label className="flex items-center justify-between p-4 hover:bg-gray-50 cursor-pointer transition-colors rounded-t-xl">
+                    <div>
+                      <p className="font-medium text-gray-900">New Orders</p>
+                      <p className="text-sm text-gray-500">Get notified when a customer places a new order.</p>
+                    </div>
+                    <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black accent-black" defaultChecked />
+                  </label>
+                  
+                  <label className="flex items-center justify-between p-4 hover:bg-gray-50 cursor-pointer transition-colors">
+                    <div>
+                      <p className="font-medium text-gray-900">Low Stock Alerts</p>
+                      <p className="text-sm text-gray-500">Get notified when product inventory falls below threshold.</p>
+                    </div>
+                    <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black accent-black" defaultChecked />
+                  </label>
+                  
+                  <label className="flex items-center justify-between p-4 hover:bg-gray-50 cursor-pointer transition-colors">
+                    <div>
+                      <p className="font-medium text-gray-900">New Affiliate Signups</p>
+                      <p className="text-sm text-gray-500">Get notified when a new affiliate registers.</p>
+                    </div>
+                    <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black accent-black" defaultChecked />
+                  </label>
+                  
+                  <label className="flex items-center justify-between p-4 hover:bg-gray-50 cursor-pointer transition-colors rounded-b-xl">
+                    <div>
+                      <p className="font-medium text-gray-900">Customer Support Tickets</p>
+                      <p className="text-sm text-gray-500">Get notified when a customer submits a new ticket.</p>
+                    </div>
+                    <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black accent-black" />
+                  </label>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === "security" && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-medium text-gray-900">Security Preferences</h3>
+                <p className="text-sm text-gray-500 mb-6">Manage security policies for admin and customer accounts.</p>
+                
+                <div className="grid gap-6">
+                  <div className="border border-gray-200 rounded-xl p-5">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium text-gray-900 text-base">Two-Factor Authentication (2FA)</h4>
+                        <p className="text-sm text-gray-500 mt-1">Require all administrator accounts to use 2FA via Authenticator app.</p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" className="sr-only peer" defaultChecked />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
+                      </label>
+                    </div>
+                  </div>
+                  
+                  <div className="border border-gray-200 rounded-xl p-5 mt-4">
+                    <div className="mb-4 pb-4 border-b border-gray-100">
+                      <h4 className="font-medium text-gray-900 text-base">Change Password</h4>
+                      <p className="text-sm text-gray-500 mt-1">Update your administrator password.</p>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+                        <input type="password" placeholder="••••••••" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                        <input type="password" placeholder="••••••••" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all" />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                        <input type="password" placeholder="••••••••" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all" />
+                      </div>
+                      <button className="px-4 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors">
+                        Update Password
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Admin Session Timeout</label>
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all bg-white">
+                      <option value="15">15 Minutes</option>
+                      <option value="30">30 Minutes</option>
+                      <option value="60">1 Hour</option>
+                      <option value="1440">24 Hours</option>
+                    </select>
+                    <p className="text-xs text-gray-500 mt-2">Automatically log out inactive admin sessions after this duration.</p>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Customer Password Policy</label>
+                    <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent outline-none transition-all bg-white">
+                      <option value="standard">Standard (8+ characters, at least 1 number)</option>
+                      <option value="strict">Strict (12+ characters, uppercase, lowercase, number, symbol)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>
