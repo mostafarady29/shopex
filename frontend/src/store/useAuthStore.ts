@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import api from "@/lib/axios";
+import { useCartStore } from "./useCartStore";
 
 interface User {
   id: string;
@@ -19,7 +20,8 @@ interface AuthState {
   error: string | null;
   
   // Actions
-  login: (credentials: { email: string; password: string }) => Promise<void>;
+  login: (credentials: { email: string; password: string }) => Promise<{ requires2fa?: boolean; userId?: string } | void>;
+  verify2FA: (userId: string, token: string) => Promise<void>;
   register: (data: { firstName: string; lastName: string; email: string; password: string; role?: string; phone?: string }) => Promise<void>;
   logout: () => void;
   checkAuth: () => Promise<void>;
@@ -39,6 +41,12 @@ export const useAuthStore = create<AuthState>()(
         set({ loading: true, error: null });
         try {
           const response = await api.post("/auth/login", credentials);
+          
+          if (response.data.requires2fa) {
+            set({ loading: false });
+            return { requires2fa: true, userId: response.data.userId };
+          }
+
           const { token, user } = response.data;
           
           if (typeof window !== "undefined") {
@@ -61,6 +69,38 @@ export const useAuthStore = create<AuthState>()(
         } catch (error: any) {
           set({
             error: error.response?.data?.message || "Failed to login. Please check your credentials.",
+            loading: false,
+          });
+          throw error;
+        }
+      },
+
+      verify2FA: async (userId, tokenStr) => {
+        set({ loading: true, error: null });
+        try {
+          const response = await api.post("/auth/login/verify-2fa", { userId, token: tokenStr });
+          const { token, user } = response.data;
+          
+          if (typeof window !== "undefined") {
+            localStorage.setItem("token", token);
+          }
+
+          set({
+            user: {
+              id: user.id,
+              _id: user.id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              role: user.role,
+            },
+            token: token,
+            isAuthenticated: true,
+            loading: false,
+          });
+        } catch (error: any) {
+          set({
+            error: error.response?.data?.message || "Invalid 2FA code",
             loading: false,
           });
           throw error;
@@ -109,6 +149,7 @@ export const useAuthStore = create<AuthState>()(
           isAuthenticated: false,
           error: null,
         });
+        useCartStore.getState().resetCart();
       },
 
       checkAuth: async () => {

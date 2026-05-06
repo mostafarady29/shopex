@@ -1,28 +1,46 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Link as LinkIcon, 
   Copy, 
   Check, 
   Download,
   Share2,
-  AlertCircle
+  AlertCircle,
+  Loader2
 } from "lucide-react";
 import QRCode from "react-qr-code";
+import api from "@/lib/axios";
 
 export default function AffiliateLinks() {
   const [productUrl, setProductUrl] = useState("");
   const [generatedLink, setGeneratedLink] = useState("");
   const [copied, setCopied] = useState(false);
+  const [affiliateId, setAffiliateId] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
-  const affiliateId = "AF-10492";
+  useEffect(() => {
+    const fetchAffiliateStats = async () => {
+      try {
+        const response = await api.get("/affiliate/stats");
+        if (response.data.success) {
+          setAffiliateId(response.data.referralCode);
+        }
+      } catch (error) {
+        console.error("Failed to fetch affiliate details", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchAffiliateStats();
+  }, []);
 
   const handleGenerate = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!productUrl) return;
+    if (!productUrl || !affiliateId) return;
     
-    // Simulate generation
+    // Generate real affiliate link
     const cleanUrl = productUrl.split("?")[0];
     setGeneratedLink(`${cleanUrl}?ref=${affiliateId}`);
   };
@@ -64,9 +82,10 @@ export default function AffiliateLinks() {
 
           <button 
             type="submit"
-            className="bg-[#111] hover:bg-[#222] text-white w-full py-4 rounded-2xl font-bold transition-all transform active:scale-[0.98]"
+            disabled={isLoading || !affiliateId}
+            className="bg-[#111] hover:bg-[#222] disabled:bg-[#888] disabled:cursor-not-allowed text-white w-full py-4 rounded-2xl font-bold transition-all transform active:scale-[0.98] flex items-center justify-center gap-2"
           >
-            Generate Tracking Link
+            {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Generate Tracking Link"}
           </button>
         </form>
 

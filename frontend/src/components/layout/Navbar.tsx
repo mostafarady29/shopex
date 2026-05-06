@@ -40,19 +40,47 @@ const suggestions = [
   "Smart Watch",
 ];
 
+const searchCategories = [
+  "All",
+  "Electronics",
+  "Men's Clothing",
+  "Home & Kitchen",
+  "Jewelery",
+  "Women's Clothing"
+];
+
 export const Navbar = () => {
   const [query, setQuery] = useState("");
   const [focused, setFocused] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
+  
   const inputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsCategoryDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleSearch = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (query.trim()) {
-      router.push(`/products?search=${encodeURIComponent(query.trim())}`);
+    if (query.trim() || selectedCategory !== "All") {
+      let url = `/products?`;
+      if (query.trim()) url += `search=${encodeURIComponent(query.trim())}`;
+      if (selectedCategory !== "All") {
+        url += (query.trim() ? "&" : "") + `category=${encodeURIComponent(selectedCategory)}`;
+      }
+      router.push(url);
       setFocused(false);
     }
   };
@@ -77,7 +105,11 @@ export const Navbar = () => {
     recognition.onresult = (event: any) => {
       const speechResult = event.results[0][0].transcript;
       setQuery(speechResult);
-      router.push(`/products?search=${encodeURIComponent(speechResult)}`);
+      let url = `/products?search=${encodeURIComponent(speechResult)}`;
+      if (selectedCategory !== "All") {
+        url += `&category=${encodeURIComponent(selectedCategory)}`;
+      }
+      router.push(url);
       setFocused(false);
     };
 
@@ -149,9 +181,39 @@ export const Navbar = () => {
           </Link>
 
           {/* Category Dropdown */}
-          <div className="hidden md:flex items-center gap-1 text-sm font-semibold text-[#555] hover:text-[#111] cursor-pointer select-none transition-colors">
-            <span>All</span>
-            <ChevronDown className="w-4 h-4" />
+          <div className="hidden md:flex relative items-center" ref={dropdownRef}>
+            <button
+              type="button"
+              onClick={() => setIsCategoryDropdownOpen(!isCategoryDropdownOpen)}
+              className="flex items-center gap-1 text-sm font-semibold text-[#555] hover:text-[#111] cursor-pointer select-none transition-colors"
+            >
+              <span className="max-w-[100px] truncate">{selectedCategory}</span>
+              <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isCategoryDropdownOpen ? "rotate-180" : ""}`} />
+            </button>
+            
+            {/* Dropdown Menu */}
+            {isCategoryDropdownOpen && (
+              <div className="absolute top-full left-0 mt-4 w-48 bg-white border border-[#E5E5E5] rounded-xl shadow-xl overflow-hidden z-50 animate-fade-up">
+                <ul className="py-1 max-h-64 overflow-y-auto scrollbar-hide">
+                  {searchCategories.map((cat) => (
+                    <li key={cat}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedCategory(cat);
+                          setIsCategoryDropdownOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-2.5 text-sm hover:bg-[#FFF7EC] hover:text-[#FF9900] transition-colors ${
+                          selectedCategory === cat ? "text-[#FF9900] font-bold bg-[#FFF7EC]" : "text-[#333]"
+                        }`}
+                      >
+                        {cat}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* Search ──────────────────────────────────────────── */}
@@ -221,7 +283,11 @@ export const Navbar = () => {
                         type="button"
                         onMouseDown={() => {
                           setQuery(s);
-                          router.push(`/products?search=${encodeURIComponent(s)}`);
+                          let url = `/products?search=${encodeURIComponent(s)}`;
+                          if (selectedCategory !== "All") {
+                            url += `&category=${encodeURIComponent(selectedCategory)}`;
+                          }
+                          router.push(url);
                           setFocused(false);
                         }}
                         className="w-full text-left px-4 py-2.5 text-sm text-[#333] hover:bg-[#FFF7EC] hover:text-[#FF9900] flex items-center gap-3 transition-colors"

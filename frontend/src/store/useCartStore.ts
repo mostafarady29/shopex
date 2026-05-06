@@ -29,6 +29,7 @@ type CartStore = {
   removeItem: (itemId: string) => Promise<void>;
   clearCart: () => Promise<void>;
   getCartCount: () => Promise<void>;
+  resetCart: () => void;
 };
 
 export const useCartStore = create<CartStore>((set, get) => ({
@@ -105,5 +106,9 @@ export const useCartStore = create<CartStore>((set, get) => ({
     } catch {
       set({ cartCount: 0 });
     }
+  },
+
+  resetCart: () => {
+    set({ items: [], cartCount: 0 });
   },
 }));

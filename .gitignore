@@ -7,3 +7,4 @@ python-ai/venv/
 __pycache__/
 *.pyc
 .DS_Store
+vercel-env-*.txt

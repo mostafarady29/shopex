@@ -9,9 +9,12 @@ import { useAuthStore } from "@/store/useAuthStore";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [needs2FA, setNeeds2FA] = useState(false);
+  const [twoFactorCode, setTwoFactorCode] = useState("");
+  const [tempUserId, setTempUserId] = useState("");
   const router = useRouter();
   
-  const { login, loading, error: authError, isAuthenticated, user } = useAuthStore();
+  const { login, verify2FA, loading, error: authError, isAuthenticated, user } = useAuthStore();
   const [localError, setLocalError] = useState("");
 
   const error = localError || authError;
@@ -32,14 +35,32 @@ export default function LoginPage() {
     e.preventDefault();
     setLocalError("");
 
+    if (needs2FA) {
+      if (!twoFactorCode) {
+        setLocalError("Please enter your 2FA code.");
+        return;
+      }
+      try {
+        await verify2FA(tempUserId, twoFactorCode);
+        // Redirect happens automatically
+      } catch (err) {
+        // Error handled by store
+      }
+      return;
+    }
+
     if (!email || !password) {
       setLocalError("Please enter both email and password.");
       return;
     }
 
     try {
-      await login({ email, password });
-      // Redirect happens automatically via useEffect
+      const result = await login({ email, password });
+      if (result && result.requires2fa) {
+        setNeeds2FA(true);
+        setTempUserId(result.userId as string);
+      }
+      // Redirect happens automatically if no 2FA via useEffect
     } catch (err) {
       // Error is handled by the store
     }
@@ -75,57 +96,79 @@ export default function LoginPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-bold text-[#111] mb-1.5"
-              >
-                Email or mobile phone number
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-[#AAA]" />
+            {!needs2FA ? (
+              <>
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-bold text-[#111] mb-1.5"
+                  >
+                    Email or mobile phone number
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Mail className="h-5 w-5 text-[#AAA]" />
+                    </div>
+                    <input
+                      id="email"
+                      type="text"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="block w-full pl-10 pr-3 py-2.5 border border-[#CCC] rounded-xl text-sm placeholder-[#AAA] focus:outline-none focus:border-[#FF9900] focus:ring-1 focus:ring-[#FF9900] transition-colors"
+                      placeholder="Enter your email"
+                    />
+                  </div>
                 </div>
-                <input
-                  id="email"
-                  type="text"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-2.5 border border-[#CCC] rounded-xl text-sm placeholder-[#AAA] focus:outline-none focus:border-[#FF9900] focus:ring-1 focus:ring-[#FF9900] transition-colors"
-                  placeholder="Enter your email"
-                />
-              </div>
-            </div>
 
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-bold text-[#111]"
-                >
-                  Password
-                </label>
-                <Link
-                  href="/auth/forgot-password"
-                  className="text-xs font-semibold text-[#FF9900] hover:text-[#E68A00] transition-colors"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-[#AAA]" />
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-bold text-[#111]"
+                    >
+                      Password
+                    </label>
+                    <Link
+                      href="/auth/forgot-password"
+                      className="text-xs font-semibold text-[#FF9900] hover:text-[#E68A00] transition-colors"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Lock className="h-5 w-5 text-[#AAA]" />
+                    </div>
+                    <input
+                      id="password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="block w-full pl-10 pr-3 py-2.5 border border-[#CCC] rounded-xl text-sm placeholder-[#AAA] focus:outline-none focus:border-[#FF9900] focus:ring-1 focus:ring-[#FF9900] transition-colors"
+                      placeholder="Enter your password"
+                    />
+                  </div>
                 </div>
+              </>
+            ) : (
+              <div>
+                <label
+                  htmlFor="twoFactorCode"
+                  className="block text-sm font-bold text-[#111] mb-1.5 text-center"
+                >
+                  Enter Authenticator Code
+                </label>
                 <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-2.5 border border-[#CCC] rounded-xl text-sm placeholder-[#AAA] focus:outline-none focus:border-[#FF9900] focus:ring-1 focus:ring-[#FF9900] transition-colors"
-                  placeholder="Enter your password"
+                  id="twoFactorCode"
+                  type="text"
+                  value={twoFactorCode}
+                  onChange={(e) => setTwoFactorCode(e.target.value)}
+                  className="block w-full px-3 py-3 border border-[#CCC] rounded-xl text-2xl tracking-[0.5em] text-center placeholder-[#AAA] focus:outline-none focus:border-[#FF9900] focus:ring-1 focus:ring-[#FF9900] transition-colors"
+                  placeholder="000000"
+                  maxLength={6}
                 />
               </div>
-            </div>
+            )}
 
             <button
               type="submit"
@@ -135,10 +178,10 @@ export default function LoginPage() {
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Signing in...
+                  {needs2FA ? "Verifying..." : "Signing in..."}
                 </>
               ) : (
-                "Sign in"
+                needs2FA ? "Verify Code" : "Sign in"
               )}
             </button>
           </form>

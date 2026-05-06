@@ -28,6 +28,8 @@ app.use('/api/chat', require('./routes/chat'));
 app.use('/api/cart', require('./routes/cart'));
 app.use('/api/wishlist', require('./routes/wishlist'));
 app.use('/api/stock-checker', require('./routes/stock-checker'));
+app.use('/api/settings', require('./routes/settings'));
+app.use('/api/newsletter', require('./routes/newsletter'));
 
 // Base API route
 app.get('/api', (req, res) => {
@@ -43,7 +45,8 @@ app.get('/api/health', (req, res) => {
 app.use(errorHandler);
 
 // Start server (no MongoDB - using Prisma/PostgreSQL)
-if (process.env.NODE_ENV !== 'production' && process.env.VERCEL !== '1') {
+// Start server only if run directly and not in test environment
+if (require.main === module && process.env.NODE_ENV !== 'test') {
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
         console.log(`🚀 SaaS Hub API running on http://localhost:${PORT}`);
