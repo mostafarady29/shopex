@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { authenticator } = require('otplib');
 const prisma = require('../config/prisma');
 const { protect } = require('../middleware/auth');
 
@@ -95,15 +94,6 @@ router.post('/login', async (req, res, next) => {
             return res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
 
-        // If 2FA is enabled, stop here and ask for the code
-        if (user.isTwoFactorEnabled) {
-            return res.json({
-                success: true,
-                requires2fa: true,
-                userId: user.id
-            });
-        }
-
         const token = signToken(user.id, user.role);
         const userData = {
             id: user.id,
@@ -119,100 +109,7 @@ router.post('/login', async (req, res, next) => {
     }
 });
 
-// POST /api/auth/login/verify-2fa
-router.post('/login/verify-2fa', async (req, res, next) => {
-    try {
-        const { userId, token } = req.body;
-
-        if (!userId || !token) {
-            return res.status(400).json({ success: false, message: 'Please provide userId and token' });
-        }
-
-        const user = await prisma.user.findUnique({ where: { id: userId } });
-        if (!user || !user.isTwoFactorEnabled || !user.twoFactorSecret) {
-            return res.status(400).json({ success: false, message: 'Invalid 2FA request' });
-        }
-
-        const isValid = authenticator.verify({ token, secret: user.twoFactorSecret });
-        if (!isValid) {
-            return res.status(401).json({ success: false, message: 'Invalid 2FA code' });
-        }
-
-        const jwtToken = signToken(user.id, user.role);
-        const userData = {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            role: user.role
-        };
-
-        res.json({ success: true, token: jwtToken, user: userData });
-    } catch (err) {
-        next(err);
-    }
-});
-
-// POST /api/auth/2fa/generate
-router.post('/2fa/generate', protect, async (req, res, next) => {
-    try {
-        const user = await prisma.user.findUnique({ where: { id: req.user.id } });
-        
-        const secret = authenticator.generateSecret();
-        const otpauthUrl = authenticator.keyuri(user.email, 'ShopEx', secret);
-
-        await prisma.user.update({
-            where: { id: user.id },
-            data: { twoFactorSecret: secret } // temp store secret, don't enable yet
-        });
-
-        res.json({ success: true, otpauthUrl });
-    } catch (err) {
-        next(err);
-    }
-});
-
-// POST /api/auth/2fa/enable
-router.post('/2fa/enable', protect, async (req, res, next) => {
-    try {
-        const { token } = req.body;
-        const user = await prisma.user.findUnique({ where: { id: req.user.id } });
-
-        if (!user.twoFactorSecret) {
-            return res.status(400).json({ success: false, message: 'Please generate 2FA secret first' });
-        }
-
-        const isValid = authenticator.verify({ token, secret: user.twoFactorSecret });
-        if (!isValid) {
-            return res.status(400).json({ success: false, message: 'Invalid 2FA code' });
-        }
-
-        await prisma.user.update({
-            where: { id: user.id },
-            data: { isTwoFactorEnabled: true }
-        });
-
-        res.json({ success: true, message: '2FA has been successfully enabled' });
-    } catch (err) {
-        next(err);
-    }
-});
-
-// POST /api/auth/2fa/disable
-router.post('/2fa/disable', protect, async (req, res, next) => {
-    try {
-        const { currentPassword } = req.body; // Optional: require password to disable 2FA
-        
-        await prisma.user.update({
-            where: { id: req.user.id },
-            data: { isTwoFactorEnabled: false, twoFactorSecret: null }
-        });
-
-        res.json({ success: true, message: '2FA has been disabled' });
-    } catch (err) {
-        next(err);
-    }
-});
+// 2FA routes removed — otplib caused ESM crash on Vercel
 
 // PUT /api/auth/update-password
 router.put('/update-password', protect, async (req, res, next) => {
