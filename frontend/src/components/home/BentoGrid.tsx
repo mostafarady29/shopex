@@ -224,29 +224,58 @@ export const BentoGrid = () => {
   React.useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await api.get("/products?limit=12");
-        const products = res.data.products || [];
+        // Fetch from diverse categories for a better-looking homepage
+        const categoryQueries = [
+          api.get('/products?category=Electronics&sort=rating&limit=4'),
+          api.get('/products?category=Home%20%26%20Kitchen&sort=rating&limit=4'),
+          api.get('/products?sort=rating&minRating=4&limit=4'),
+        ];
         
-        // Map DB products to ProductCard shape
-        const mappedProducts = products.map((p: any) => ({
-          id: p.id,
-          name: p.name,
-          price: Math.floor(p.price),
-          originalPrice: p.comparePrice > p.price ? Math.floor(p.comparePrice) : Math.floor(p.price),
-          rating: p.rating || 4.5,
-          reviews: p.reviewCount || 0,
-          image: p.images && p.images.length > 0 ? p.images[0] : "📦",
-          badge: p.featured ? "Prime" : null,
-          discount: p.comparePrice > p.price ? Math.round((1 - p.price / p.comparePrice) * 100) : 0,
-        }));
+        const results = await Promise.allSettled(categoryQueries);
+        
+        const allSections = results.map((result, i) => {
+          if (result.status !== 'fulfilled') return null;
+          const products = result.value.data.products || [];
+          if (products.length === 0) return null;
+          
+          const mappedProducts = products.map((p: any) => ({
+            id: p.id,
+            name: p.name,
+            price: Math.floor(p.price),
+            originalPrice: p.comparePrice > p.price ? Math.floor(p.comparePrice) : Math.floor(p.price),
+            rating: p.rating || 4.5,
+            reviews: p.reviewCount || 0,
+            image: p.images && p.images.length > 0 ? p.images[0] : "📦",
+            badge: p.featured ? "Prime" : null,
+            discount: p.comparePrice > p.price ? Math.round((1 - p.price / p.comparePrice) * 100) : 0,
+          }));
 
-        // Split into 3 sections (up to 4 products each)
-        const newSections = sectionDefs.map((def, i) => ({
-          ...def,
-          products: mappedProducts.slice(i * 4, i * 4 + 4),
-        })).filter(sec => sec.products.length > 0);
+          return { ...sectionDefs[i], products: mappedProducts };
+        }).filter(Boolean);
 
-        setSections(newSections);
+        // Fallback: if category queries return empty, use generic fetch
+        if (allSections.length === 0) {
+          const res = await api.get('/products?limit=12&sort=rating');
+          const products = res.data.products || [];
+          const mappedProducts = products.map((p: any) => ({
+            id: p.id,
+            name: p.name,
+            price: Math.floor(p.price),
+            originalPrice: p.comparePrice > p.price ? Math.floor(p.comparePrice) : Math.floor(p.price),
+            rating: p.rating || 4.5,
+            reviews: p.reviewCount || 0,
+            image: p.images && p.images.length > 0 ? p.images[0] : "📦",
+            badge: p.featured ? "Prime" : null,
+            discount: p.comparePrice > p.price ? Math.round((1 - p.price / p.comparePrice) * 100) : 0,
+          }));
+          const newSections = sectionDefs.map((def, i) => ({
+            ...def,
+            products: mappedProducts.slice(i * 4, i * 4 + 4),
+          })).filter(sec => sec.products.length > 0);
+          setSections(newSections);
+        } else {
+          setSections(allSections);
+        }
       } catch (err) {
         console.error(err);
       }

@@ -42,9 +42,13 @@ export const Hero = () => {
   React.useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await api.get('/products?limit=1');
+        // Get high-rated products and pick the best-looking one
+        const res = await api.get('/products?sort=rating&limit=10');
         if (res.data.products && res.data.products.length > 0) {
-          setProduct(res.data.products[0]);
+          const bestProduct = res.data.products.find(
+            (p: any) => p.images && p.images.length > 0 && p.images[0].startsWith('http') && p.price > 20 && p.price < 1000
+          ) || res.data.products[0];
+          setProduct(bestProduct);
         }
       } catch (err) {
         console.error(err);
