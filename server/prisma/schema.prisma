@@ -37,6 +37,8 @@ model User {
   chatMessages       ChatMessage[]
   cartItems          CartItem[]
   wishlistItems      WishlistItem[]
+  stockRequestsMade    StockRequest[] @relation("RequestedByUser")
+  stockRequestsReviewed StockRequest[] @relation("ReviewedByUser")
 }
 
 
@@ -70,10 +72,11 @@ model Product {
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 
-  orderItems   OrderItem[]
-  reviews      Review[]
-  cartItems    CartItem[]
+  orderItems    OrderItem[]
+  reviews       Review[]
+  cartItems     CartItem[]
   wishlistItems WishlistItem[]
+  stockRequests StockRequest[]
 }
 
 model Order {
@@ -205,4 +208,22 @@ model Settings {
   customerPasswordPolicy String   @default("standard")
   
   updatedAt              DateTime @updatedAt
+}
+
+model StockRequest {
+  id            String   @id @default(uuid())
+  productId     String
+  product       Product  @relation(fields: [productId], references: [id])
+  requestedById String
+  requestedBy   User     @relation("RequestedByUser", fields: [requestedById], references: [id])
+  type          String   // "add" or "remove"
+  quantity      Int
+  reason        String
+  status        String   @default("pending") // pending, approved, rejected
+  reviewedById  String?
+  reviewedBy    User?    @relation("ReviewedByUser", fields: [reviewedById], references: [id])
+  reviewNote    String?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
