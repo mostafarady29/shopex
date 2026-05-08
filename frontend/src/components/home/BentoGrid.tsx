@@ -25,12 +25,12 @@ const sectionDefs = [
 ];
 
 const categories = [
-  { label: "Electronics", image: "https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400&q=80", href: "/products?category=Electronics" },
-  { label: "Men's Clothing", image: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&q=80", href: "/products?category=Men's Clothing" },
-  { label: "Home", image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=400&q=80", href: "/products?category=Home & Kitchen" },
-  { label: "Sports", image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400&q=80", href: "/products?category=Sports & Outdoors" },
-  { label: "Toys", image: "https://images.unsplash.com/photo-1596462502278-27bf85033e5a?w=400&q=80", href: "/products?category=Toys & Games" },
-  { label: "Jewelry", image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&q=80", href: "/products?category=Clothing, Shoes & Jewelry" },
+  { label: "Electronics", emoji: "💻", href: "/products?category=Electronics" },
+  { label: "Men's Clothing", emoji: "👔", href: "/products?category=Men's Clothing" },
+  { label: "Home", emoji: "🏠", href: "/products?category=Home & Kitchen" },
+  { label: "Sports", emoji: "⚽", href: "/products?category=Sports & Outdoors" },
+  { label: "Toys", emoji: "🎮", href: "/products?category=Toys & Games" },
+  { label: "Jewelry", emoji: "💎", href: "/products?category=Clothing, Shoes & Jewelry" },
 ];
 
 /* ── Product Card ─────────────────────────────────── */
@@ -305,7 +305,7 @@ export const BentoGrid = () => {
                 href={cat.href}
                 className="flex-shrink-0 flex flex-col items-center gap-2 bg-white border border-[#F0F0F0] hover:border-[#FF9900] rounded-2xl px-5 py-4 shadow-sm hover:shadow-md transition-all duration-200 group"
               >
-                <img src={cat.image} alt={cat.label} className="w-12 h-12 object-cover rounded-full group-hover:scale-110 transition-transform duration-200 shadow-sm" />
+                <span className="text-3xl group-hover:scale-110 transition-transform duration-200">{cat.emoji}</span>
                 <span className="text-xs font-semibold text-[#555] group-hover:text-[#FF9900] transition-colors whitespace-nowrap">
                   {cat.label}
                 </span>
