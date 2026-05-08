@@ -153,22 +153,14 @@ export default function Chatbot() {
         .finally(() => setIsTyping(false));
     } else {
       // Guest: go through Node.js backend guest endpoint (no DB save)
-      fetch("http://localhost:5000/api/chat/guest", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: text }),
-      })
+      api.post("/chat/guest", { message: text })
         .then((res) => {
-          if (!res.ok) throw new Error("Failed to fetch");
-          return res.json();
-        })
-        .then((data) => {
           setMessages((prev) => [
             ...prev,
             {
               id: (Date.now() + 1).toString(),
               sender: "bot",
-              text: data.data.reply,
+              text: res.data.data.reply,
               timestamp: new Date(),
             }
           ]);

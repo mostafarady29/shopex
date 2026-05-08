@@ -2,8 +2,56 @@ const express = require('express');
 const router = express.Router();
 const prisma = require('../config/prisma');
 const { protect } = require('../middleware/auth');
+const { GoogleGenAI } = require('@google/genai');
 
-const PYTHON_AI_URL = process.env.PYTHON_AI_URL || 'http://127.0.0.1:8000';
+// Initialize Gemini
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+const SYSTEM_PROMPT = `You are ShopEx Assistant — the official AI helper for the ShopEx e-commerce platform.
+
+Your role:
+- Help customers find products, track orders, understand return policies, and answer shopping questions.
+- Help affiliates understand their commissions, generate referral links, and get marketing tips.
+- Help admins get quick insights about revenue, top products, and user activity.
+
+Behavior rules:
+- Be friendly, concise, and helpful.
+- If you don't know something specific about the user's data, say so honestly.
+- Never make up order statuses or product details — only use information provided in context.
+- Support both English and Arabic — respond in the same language the user uses.
+- Keep responses under 200 words unless the user asks for detail.`;
+
+// Helper: call Gemini API
+async function callGemini(message, chatHistory, contextParts) {
+    let systemInstruction = SYSTEM_PROMPT;
+    if (contextParts && contextParts.length > 0) {
+        systemInstruction += '\n\nCurrent user context:\n' + contextParts.join('\n');
+    }
+
+    // Build contents array from chat history
+    const contents = [];
+    if (chatHistory && chatHistory.length > 0) {
+        for (const msg of chatHistory.slice(0, -1)) {
+            contents.push({
+                role: msg.role === 'user' ? 'user' : 'model',
+                parts: [{ text: msg.content }],
+            });
+        }
+    }
+    contents.push({ role: 'user', parts: [{ text: message }] });
+
+    const response = await ai.models.generateContent({
+        model: 'gemini-2.0-flash',
+        contents,
+        config: {
+            systemInstruction,
+            temperature: 0.7,
+            maxOutputTokens: 1024,
+        },
+    });
+
+    return response.text || 'Sorry, I could not process that.';
+}
 
 // POST /api/chat - Send message & get AI response (authenticated users)
 router.post('/', protect, async (req, res) => {
@@ -31,7 +79,7 @@ router.post('/', protect, async (req, res) => {
             content: m.content,
         }));
 
-        // Get user info for context
+        // Get user orders for context
         const userOrders = await prisma.order.findMany({
             where: { userId },
             orderBy: { createdAt: 'desc' },
@@ -39,28 +87,19 @@ router.post('/', protect, async (req, res) => {
             include: { items: { include: { product: true } } },
         });
 
-        // Call Python AI service
-        const aiResponse = await fetch(`${PYTHON_AI_URL}/api/chat`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                message,
-                user_id: userId,
-                user_name: `${req.user.firstName} ${req.user.lastName}`,
-                user_role: req.user.role,
-                chat_history: chatHistory,
-                user_orders: userOrders.map(o => ({
-                    orderId: o.orderId,
-                    status: o.status,
-                    total: o.total,
-                    date: o.createdAt,
-                    items: o.items.map(i => i.name),
-                })),
-            }),
-        });
+        // Build context
+        const contextParts = [];
+        contextParts.push(`User: ${req.user.firstName} ${req.user.lastName} (Role: ${req.user.role})`);
+        
+        if (userOrders.length > 0) {
+            const ordersText = userOrders.map(o =>
+                `- Order #${o.orderId}: ${o.status} | $${o.total} | Items: ${o.items.map(i => i.name).join(', ')}`
+            ).join('\n');
+            contextParts.push(`Recent orders:\n${ordersText}`);
+        }
 
-        const aiData = await aiResponse.json();
-        const aiReply = aiData.response || 'Sorry, I could not process that.';
+        // Call Gemini directly
+        const aiReply = await callGemini(message, chatHistory, contextParts);
 
         // Save assistant response to DB
         await prisma.chatMessage.create({
@@ -83,15 +122,7 @@ router.post('/guest', async (req, res) => {
             return res.status(400).json({ success: false, message: 'Message is required' });
         }
 
-        const aiResponse = await fetch(`${PYTHON_AI_URL}/api/chat`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message, user_id: null }),
-        });
-
-        const aiData = await aiResponse.json();
-        const aiReply = aiData.response || 'Sorry, I could not process that.';
-
+        const aiReply = await callGemini(message, [], []);
         res.json({ success: true, data: { reply: aiReply } });
     } catch (err) {
         console.error('Guest chat error:', err.message);
