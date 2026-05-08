@@ -28,6 +28,7 @@ async function callGemini(message, chatHistory, contextParts) {
         systemInstruction += '\n\nCurrent user context:\n' + contextParts.join('\n');
     }
 
+    try {
     // Build contents array from chat history
     const contents = [];
     if (chatHistory && chatHistory.length > 0) {
@@ -51,6 +52,13 @@ async function callGemini(message, chatHistory, contextParts) {
     });
 
     return response.text || 'Sorry, I could not process that.';
+    } catch (err) {
+        const errMsg = err.message || '';
+        if (errMsg.includes('429') || errMsg.includes('RESOURCE_EXHAUSTED') || errMsg.includes('quota')) {
+            return "I'm currently at my daily AI limit. Please try again in a few hours! 🙏";
+        }
+        throw err;
+    }
 }
 
 // POST /api/chat - Send message & get AI response (authenticated users)
