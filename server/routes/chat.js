@@ -42,7 +42,7 @@ async function callGemini(message, chatHistory, contextParts) {
     contents.push({ role: 'user', parts: [{ text: message }] });
 
     const response = await ai.models.generateContent({
-        model: 'gemini-2.0-flash',
+        model: 'gemini-2.5-flash',
         contents,
         config: {
             systemInstruction,
